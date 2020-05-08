@@ -6,10 +6,10 @@ import { ModelsInterface } from '../interfaces/ModelsInterface';
 
 export interface UserAttributes {
     id?: number;
-    name?: string;
     email?: string;
     password?: string;
-    photo?: string;
+    role?: string;
+    
     createdAt?: string;
     updatedAt?: string;
 }
@@ -30,10 +30,6 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
                 primaryKey: true,
                 autoIncrement: true
             },
-            name: {
-                type: DataTypes.STRING(128),
-                allowNull: false
-            },
             email: {
                 type: DataTypes.STRING(128),
                 allowNull: false,
@@ -46,12 +42,11 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
                     notEmpty: true
                 }
             },
-            photo: {
-                type: DataTypes.BLOB({
-                    length: 'long'
-                }),
-                allowNull: true,
-                defaultValue: null
+            role: {
+                type: DataTypes.ENUM,
+                values: ["USER", "ADMIND", "ADMINA"],
+                allowNull: false,
+                defaultValue: "USER"
             }
         }, {
             tableName: 'users',

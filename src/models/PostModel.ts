@@ -7,8 +7,12 @@ export interface PostAttributes {
     id?: number;
     title?: string;
     content?: string;
-    photo?: string;
-    author?: number;
+    file?: string;
+    thumbnail?: number;
+    published?: boolean;
+    categoria?: string;
+
+    user?: string;
     createdAt?: string;
     updatedAt?: string;
 }
@@ -34,12 +38,32 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
             type: DataTypes.TEXT,
             allowNull: false
         },
-        photo: {
-            type: DataTypes.BLOB({
-                length: 'long'
-            }),
+        published: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+        categoria: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: null
+        },
+        file: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: null
+        },
+        thumbnail: {
+            type: DataTypes.STRING,
             allowNull: false
-        }
+        },
+
+        // photo: {
+        //     type: DataTypes.BLOB({
+        //         length: 'long'
+        //     }),
+        //     allowNull: false
+        // }
     }, {
         tableName: 'posts'
     });
@@ -48,8 +72,8 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
         Post.belongsTo(models.User, {
             foreignKey: {
                 allowNull: false,
-                field: 'author',
-                name: 'author'
+                field: 'user',
+                name: 'user'
             }
         });
     };
