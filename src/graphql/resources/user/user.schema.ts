@@ -5,22 +5,22 @@ const userTypes = `
         id: ID!
         name: String!
         email: String!
-        photo: String
+        role: String!
         createdAt: String!
         updatedAt: String!
-        posts(first: Int, offset: Int): [ Post! ]!
+        player: Player
     }
 
     input UserCreateInput {
-        name: String!
         email: String!
         password: String!
+        role: String!
+        player: Player
     }
 
     input UserUpdateInput {
-        name: String!
         email: String!
-        photo: String!
+        role: String!
     }
 
     input UserUpdatePasswordInput {

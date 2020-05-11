@@ -8,13 +8,13 @@ export const tokenResolvers = {
 
     Mutation: {
 
-        createToken: (parent, { email, password }, {db}: {db: DbConnection}) => {
+        authUser: (parent, { email, password }, {db}: {db: DbConnection}) => {
             return db.User.findOne({
                 where: {email: email},
                 attributes: ['id', 'password']
             }).then((user: UserInstance) => {
 
-                let errorMessage: string = 'Unauthorized, wrong email or password!';
+                let errorMessage: string = 'Não autorizado, e-mail ou senha errados!';
                 if (!user || !user.isPassword(user.get('password'), password)) { throw new Error(errorMessage); }
 
                 const payload = {sub: user.get('id')};

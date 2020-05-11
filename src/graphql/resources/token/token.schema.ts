@@ -5,7 +5,7 @@ const tokenTypes = `
 `;
 
 const tokenMutations = `
-    createToken(email: String!, password: String!): Token
+    authUser(email: String!, password: String!): Token
 `;
 
 export {
