@@ -22,13 +22,13 @@ export const extractJwtMiddleware = (): RequestHandler => {
             if (err) { return next(); }
 
             db.User.findById(decoded.sub, {
-                attributes: ['id', 'email']
+                attributes: ['id', 'player']
             }).then((user: UserInstance) => {
 
                 if (user) {
                     req['context']['authUser'] = {
                         id: user.get('id'),
-                        email: user.get('email')
+                        playerId: user.get('player')
                     };
                 }
 

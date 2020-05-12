@@ -14,10 +14,10 @@ export const userResolvers = {
 
     User: {
 
-        posts: (user, { first = 10, offset = 0 }, {db, requestedFields}: {db: DbConnection, requestedFields: RequestedFields}, info: GraphQLResolveInfo) => {
-            return db.Post
+        player: (user, { first = 50, offset = 0 }, {db, requestedFields}: {db: DbConnection, requestedFields: RequestedFields}, info: GraphQLResolveInfo) => {
+            return db.Player
                 .findAll({
-                    where: {author: user.get('id')},
+                    where: {user: user.get('id')},
                     limit: first,
                     offset: offset,
                     attributes: requestedFields.getFields(info, {keep: ['id'], exclude: ['comments']})
@@ -28,7 +28,7 @@ export const userResolvers = {
 
     Query: {
 
-        users: (parent, { first = 10, offset = 0 }, context: ResolverContext, info: GraphQLResolveInfo) => {
+        users: (parent, { first = 50, offset = 0 }, context: ResolverContext, info: GraphQLResolveInfo) => {
             return context.db.User
                 .findAll({
                     limit: first,
@@ -44,7 +44,7 @@ export const userResolvers = {
                     attributes: context.requestedFields.getFields(info, {keep: ['id'], exclude: ['posts']})
                 })
                 .then((user: UserInstance) => {
-                    throwError(!user, `User with id ${id} not found!`);
+                    throwError(!user, `Usuário com id ${id} não encontrado!`);
                     return user;
                 }).catch(handleError);
         },
@@ -55,7 +55,7 @@ export const userResolvers = {
                     attributes: context.requestedFields.getFields(info, {keep: ['id'], exclude: ['posts']})
                 })
                 .then((user: UserInstance) => {
-                    throwError(!user, `User with id ${context.authUser.id} not found!`);
+                    throwError(!user, `Usuário com id ${context.authUser.id} não encontrado!`);
                     return user;
                 }).catch(handleError);
         })
@@ -76,7 +76,7 @@ export const userResolvers = {
                 return db.User
                     .findById(authUser.id)
                     .then((user: UserInstance) => {
-                        throwError(!user, `User with id ${authUser.id} not found!`);
+                        throwError(!user, `Usuário com id ${authUser.id} não encontrado!`);
                         return user.update(input, {transaction: t});
                     });
             }).catch(handleError);
@@ -87,7 +87,7 @@ export const userResolvers = {
                 return db.User
                     .findById(authUser.id)
                     .then((user: UserInstance) => {
-                        throwError(!user, `User with id ${authUser.id} not found!`);
+                        throwError(!user, `Usuário com id ${authUser.id} não encontrado!`);
                         return user.update(input, {transaction: t})
                             .then((user: UserInstance) => !!user);
                     });
@@ -99,7 +99,7 @@ export const userResolvers = {
                 return db.User
                     .findById(authUser.id)
                     .then((user: UserInstance) => {
-                        throwError(!user, `User with id ${authUser.id} not found!`);
+                        throwError(!user, `Usuário com id ${authUser.id} não encontrado!`);
                         return user.destroy({transaction: t})
                             .then(user => !!user);
                     });
