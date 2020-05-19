@@ -2,27 +2,21 @@ import { GraphQLResolveInfo } from "graphql";
 import { Transaction } from "sequelize";
 
 import { DbConnection } from "../../../interfaces/DbConnectionInterface";
-import { CommentInstance } from "../../../models/CommentModel2222";
 import { handleError, throwError } from "../../../utils/utils";
 import { compose } from "../../composable/composable.resolver";
 import { authResolvers } from "../../composable/auth.resolver";
 import { AuthUser } from "../../../interfaces/AuthUserInterface";
 import { DataLoaders } from "../../../interfaces/DataLoadersInterface";
-import { RequestedFields } from "../../ast/RequestedFields";
+import { ResolverContext } from "../../../interfaces/ResolverContextInterface";
+import { AddressInstance } from "../../../models/AddressModel";
 
-export const commentResolvers = {
+export const addressResolvers = {
 
-    Comment: {
+    Address: {
 
-        user: (comment, args, {db, dataloaders: {userLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
-            return userLoader
-                .load({key: comment.get('user'), info})
-                .catch(handleError);
-        },
-
-        post: (comment, args, {db, dataloaders: {postLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
-            return postLoader
-                .load({key: comment.get('post'), info})
+        player: (address, args, {db, dataloaders: {playerLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return playerLoader
+                .load({key: address.get('player'), info})
                 .catch(handleError);
         }
 
@@ -30,54 +24,63 @@ export const commentResolvers = {
 
     Query: {
 
-        commentsByPost: compose()((parent, {postId, first = 10, offset = 0}, {db, requestedFields}: {db: DbConnection, requestedFields: RequestedFields}, info: GraphQLResolveInfo) => {
-            postId = parseInt(postId);
-            return db.Comment
+        allAddresses: (parent, { first = 50, offset = 0 }, context: ResolverContext, info: GraphQLResolveInfo) => {
+            return context.db.Address
                 .findAll({
-                    where: {post: postId},
                     limit: first,
                     offset: offset,
-                    attributes: requestedFields.getFields(info, {keep: undefined})
+                    attributes: context.requestedFields.getFields(info, {keep: ['id'], exclude: ['player']})
+                }).catch(handleError);
+        },
+
+        address: (parent, { id }, context: ResolverContext, info: GraphQLResolveInfo) => {
+            id = parseInt(id);
+            return context.db.Address
+                .findById(id, {
+                    attributes: context.requestedFields.getFields(info, {keep: ['id'], exclude: ['player']})
                 })
-                .catch(handleError);
-        })
+                .then((address: AddressInstance) => {
+                    throwError(!address, `Endereço com id ${id} não encontrado!`);
+                    return address;
+                }).catch(handleError);
+        }
 
     },
 
     Mutation: {
 
-        createComment: compose(...authResolvers)((parent, {input}, {db, authUser}: {db: DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
-            // input.user = authUser.id;
+        createAddress: compose(...authResolvers)((parent, {input}, {db, authUser}: {db: DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
+            input.player = authUser.player;
             return db.sequelize.transaction((t: Transaction) => {
-                return db.Comment
+                return db.Address
                     .create(input, {transaction: t});
             }).catch(handleError);
         }),
 
-        updateComment: compose(...authResolvers)((parent, {id, input}, {db, authUser}: {db: DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
+        updateAddress: compose(...authResolvers)((parent, {id, input}, {db, authUser}: {db: DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
             id = parseInt(id);
             return db.sequelize.transaction((t: Transaction) => {
-                return db.Comment
+                return db.Address
                     .findById(id)
-                    .then((comment: CommentInstance) => {
-                        throwError(!comment, `Comment with id ${id} not found!`);
-                        throwError(comment.get('user') != authUser.id, `Unauthorized! You can only edit comments by yourself!`);
-                        input.user = authUser.id;
-                        return comment.update(input, {transaction: t});
+                    .then((address: AddressInstance) => {
+                        throwError(!address, `Endereço com id ${id} não encontrado!`);
+                        throwError(address.get('player') != authUser.player, `Não autorizado! Você só pode editar seu proprio endereço!`);
+                        input.player = authUser.player;
+                        return address.update(input, {transaction: t});
                     });
             }).catch(handleError);
         }),
 
-        deleteComment: compose(...authResolvers)((parent, {id}, {db, authUser}: {db: DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
+        deleteAddress: compose(...authResolvers)((parent, {id}, {db, authUser}: {db: DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
             id = parseInt(id);
             return db.sequelize.transaction((t: Transaction) => {
-                return db.Comment
+                return db.Address
                     .findById(id)
-                    .then((comment: CommentInstance) => {
-                        throwError(!comment, `Comment with id ${id} not found!`);
-                        throwError(comment.get('user') != authUser.id, `Unauthorized! You can only delete comments by yourself!`);
-                        return comment.destroy({transaction: t})
-                            .then(comment => !!comment);
+                    .then((address: AddressInstance) => {
+                        throwError(!address, `Endereço com id ${id} não encontrado!`);
+                        throwError(address.get('player') != authUser.player, `Não autorizado! Você só pode deletar seu proprio endereço!`);
+                        return address.destroy({transaction: t})
+                            .then(address => !!address);
                     });
             }).catch(handleError);
         })

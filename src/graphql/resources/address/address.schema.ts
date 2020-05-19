@@ -3,7 +3,7 @@ const addressTypes = `
     type Address {
         id: ID!
         createdAt: String!
-        updatedAt: String!
+        updatedAt: String
         city: String
         complement: String
         country: String
@@ -31,7 +31,7 @@ const addressTypes = `
 
 const addressQueries = `
     allAddresses(first: Int, offset: Int): [ Address! ]!
-    Address(id: ID!): Address
+    address(id: ID!): Address
 `;
 
 const addressMutations = `

@@ -32,8 +32,7 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
         },
         description: {
             type: DataTypes.STRING(128),
-            allowNull: true,
-            defaultValue: null
+            allowNull: false
         },
         status: {
             type: DataTypes.BOOLEAN,

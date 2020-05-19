@@ -8,7 +8,7 @@ export interface HabilidadeAttributes {
     name?: string;
     cadastro?: boolean;
 
-    user?: string;
+    player?: string;
     createdAt?: string;
     updatedAt?: string;
 }
@@ -41,11 +41,11 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
 
     Habilidade.associate = (models: ModelsInterface): void => {
 
-        Habilidade.belongsTo(models.User, {
+        Habilidade.belongsTo(models.Player, {
             foreignKey: {
                 allowNull: false,
-                field: 'user',
-                name: 'user'
+                field: 'player',
+                name: 'player'
             }
         });
 

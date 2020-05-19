@@ -2,7 +2,7 @@ import { GraphQLResolveInfo } from "graphql";
 import { Transaction } from "sequelize";
 
 import { DbConnection } from "../../../interfaces/DbConnectionInterface";
-import { CommentInstance } from "../../../models/CommentModel2222";
+import { CommentInstance } from "../../../models/CommentsModel";
 import { handleError, throwError } from "../../../utils/utils";
 import { compose } from "../../composable/composable.resolver";
 import { authResolvers } from "../../composable/auth.resolver";
@@ -14,15 +14,21 @@ export const commentResolvers = {
 
     Comment: {
 
-        user: (comment, args, {db, dataloaders: {userLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
-            return userLoader
-                .load({key: comment.get('user'), info})
+        from: (comment, args, {db, dataloaders: {playerLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return playerLoader
+                .load({key: comment.get('from'), info})
                 .catch(handleError);
         },
 
-        post: (comment, args, {db, dataloaders: {postLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
-            return postLoader
-                .load({key: comment.get('post'), info})
+        to: (comment, args, {db, dataloaders: {playerLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return playerLoader
+                .load({key: comment.get('to'), info})
+                .catch(handleError);
+        },
+
+        propose: (comment, args, {db, dataloaders: {proposeLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return proposeLoader
+                .load({key: comment.get('propose'), info})
                 .catch(handleError);
         }
 
@@ -47,7 +53,7 @@ export const commentResolvers = {
     Mutation: {
 
         createComment: compose(...authResolvers)((parent, {input}, {db, authUser}: {db: DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
-            input.user = authUser.id;
+            input.from = authUser.player;
             return db.sequelize.transaction((t: Transaction) => {
                 return db.Comment
                     .create(input, {transaction: t});
@@ -60,8 +66,7 @@ export const commentResolvers = {
                 return db.Comment
                     .findById(id)
                     .then((comment: CommentInstance) => {
-                        throwError(!comment, `Comment with id ${id} not found!`);
-                        throwError(comment.get('user') != authUser.id, `Unauthorized! You can only edit comments by yourself!`);
+                        throwError(!comment, `Avaliação com id ${id} não econtrado!`);
                         input.user = authUser.id;
                         return comment.update(input, {transaction: t});
                     });
@@ -74,8 +79,8 @@ export const commentResolvers = {
                 return db.Comment
                     .findById(id)
                     .then((comment: CommentInstance) => {
-                        throwError(!comment, `Comment with id ${id} not found!`);
-                        throwError(comment.get('user') != authUser.id, `Unauthorized! You can only delete comments by yourself!`);
+                        throwError(!comment, `Avaliação com id ${id} não econtrado!`);
+                        throwError(comment.get('from') != authUser.player, `Unauthorized! You can only delete comments by yourself!`);
                         return comment.destroy({transaction: t})
                             .then(comment => !!comment);
                     });

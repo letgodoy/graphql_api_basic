@@ -2,12 +2,23 @@ const commentTypes = `
 
     type Comment {
         id: ID!
-        comment: String!
         createdAt: String!
-        updatedAt: String!
-        user: User!
-        post: Post!
+        updatedAt: String
+        description: String!
+        reply: String
+        typeTo: TYPE!
+        rating: RATING!
+
+        from: Player!
+        to: Player!
+        propose: Propose!
     }
+
+    enum RATING {
+        POSITIVE
+        NEUTRAL
+        NEGATIVE
+      }
 
     input CommentInput {
         comment: String!

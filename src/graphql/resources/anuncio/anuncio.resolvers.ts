@@ -14,20 +14,20 @@ export const anuncioResolvers = {
 
     Anuncio: {
 
-        player: (anuncio, args, {db, dataloaders: {userLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
-            return userLoader
+        player: (anuncio, args, {db, dataloaders: {playerLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return playerLoader
                 .load({key: anuncio.get('player'), info})
                 .catch(handleError);
         },
 
-        proposta: (anuncio, args, {db, dataloaders: {postLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
-            return postLoader
-                .load({key: anuncio.get('proposta'), info})
+        proposta: (anuncio, args, {db, dataloaders: {proposeLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return proposeLoader
+                .load({key: anuncio.get('proposes'), info})
                 .catch(handleError);
         },
 
-        skills: (anuncio, args, {db, dataloaders: {postLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
-            return postLoader
+        skills: (anuncio, args, {db, dataloaders: {skillsLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return skillsLoader
                 .load({key: anuncio.get('skills'), info})
                 .catch(handleError);
         }
@@ -45,7 +45,7 @@ export const anuncioResolvers = {
                 }).catch(handleError);
         },
 
-        Anuncio: (parent, { id }, context: ResolverContext, info: GraphQLResolveInfo) => {
+        anuncio: (parent, { id }, context: ResolverContext, info: GraphQLResolveInfo) => {
             id = parseInt(id);
             return context.db.Anuncio
                 .findById(id, {

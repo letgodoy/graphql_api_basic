@@ -3,7 +3,7 @@ const anuncioTypes = `
     type Anuncio {
         id: ID!
         createdAt: String!
-        updatedAt: String!
+        updatedAt: String
         active: Boolean
         description: String!
         files: [File!]!
@@ -27,7 +27,7 @@ const anuncioTypes = `
 
 const anuncioQueries = `
     allAnuncioes(first: Int, offset: Int): [ Anuncio! ]!
-    Anuncio(id: ID!): Anuncio
+    anuncio(id: ID!): Anuncio
 `;
 
 const anuncioMutations = `
