@@ -11,13 +11,13 @@ export const tokenResolvers = {
         authUser: (parent, { email, password }, {db}: {db: DbConnection}) => {
             return db.User.findOne({
                 where: {email: email},
-                attributes: ['id', 'password']
+                attributes: ['id', 'password', 'player']
             }).then((user: UserInstance) => {
 
                 let errorMessage: string = 'Não autorizado, e-mail ou senha errados!';
                 if (!user || !user.isPassword(user.get('password'), password)) { throw new Error(errorMessage); }
 
-                const payload = {sub: user.get('id')};
+                const payload = {sub: user.get('playerId')};
 
                 return {
                     token: jwt.sign(payload, JWT_SECRET)

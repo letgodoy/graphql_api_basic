@@ -5,22 +5,28 @@ const userTypes = `
         id: ID!
         name: String!
         email: String!
-        role: String!
+        role: ROLE!
         createdAt: String!
         updatedAt: String!
         player: Player
     }
 
+    enum ROLE {
+        USER
+        ADMIND
+        ADMINA
+      }
+
     input UserCreateInput {
         email: String!
         password: String!
-        role: String!
+        role: ROLE!
         player: Player
     }
 
     input UserUpdateInput {
         email: String!
-        role: String!
+        role: ROLE!
     }
 
     input UserUpdatePasswordInput {
