@@ -8,30 +8,24 @@ import { authResolvers } from "../../composable/auth.resolver";
 import { AuthUser } from "../../../interfaces/AuthUserInterface";
 import { DataLoaders } from "../../../interfaces/DataLoadersInterface";
 import { ResolverContext } from "../../../interfaces/ResolverContextInterface";
-import { CategoryInstance } from "../../../models/CategoryModel";
+import { NewsInstance } from "../../../models/NewsModel";
 
-export const categoryResolvers = {
+export const newsResolvers = {
 
-    Category: {
+    News: {
 
-        user: (category, args, {db, dataloaders: {userLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+        user: (news, args, {db, dataloaders: {userLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
             return userLoader
-                .load({key: category.get('user'), info})
+                .load({key: news.get('user'), info})
                 .catch(handleError);
         },
-
-        skills: (anuncio, args, {db, dataloaders: {skillsLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
-            return skillsLoader
-                .load({key: anuncio.get('skillses'), info})
-                .catch(handleError);
-        }
 
     },
 
     Query: {
 
-        allCategories: (parent, { first = 50, offset = 0 }, context: ResolverContext, info: GraphQLResolveInfo) => {
-            return context.db.Category
+        allNews: (parent, { first = 50, offset = 0 }, context: ResolverContext, info: GraphQLResolveInfo) => {
+            return context.db.News
                 .findAll({
                     limit: first,
                     offset: offset,
@@ -39,15 +33,15 @@ export const categoryResolvers = {
                 }).catch(handleError);
         },
 
-        category: (parent, { id }, context: ResolverContext, info: GraphQLResolveInfo) => {
+        news: (parent, { id }, context: ResolverContext, info: GraphQLResolveInfo) => {
             id = parseInt(id);
-            return context.db.Category
+            return context.db.News
                 .findById(id, {
                     attributes: context.requestedFields.getFields(info, {keep: ['id'], exclude: ['skillses']})
                 })
-                .then((category: CategoryInstance) => {
-                    throwError(!category, `Categoria com id ${id} não encontrado!`);
-                    return category;
+                .then((news: NewsInstance) => {
+                    throwError(!news, `Noticia com id ${id} não encontrado!`);
+                    return news;
                 }).catch(handleError);
         }
 
@@ -55,38 +49,38 @@ export const categoryResolvers = {
 
     Mutation: {
 
-        createCategory: compose(...authResolvers)((parent, {input}, {db, authUser}: {db: DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
+        createNews: compose(...authResolvers)((parent, {input}, {db, authUser}: {db: DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
             input.user = authUser.id;
             return db.sequelize.transaction((t: Transaction) => {
                 throwError(authUser.role != "ADMINA", `Não autorizado! Você não tem permissoes para isso!`);
-                return db.Category
+                return db.News
                     .create(input, {transaction: t});
             }).catch(handleError);
         }),
 
-        updateCategory: compose(...authResolvers)((parent, {id, input}, {db, authUser}: {db: DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
+        updateNews: compose(...authResolvers)((parent, {id, input}, {db, authUser}: {db: DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
             // id = parseInt(id);
             return db.sequelize.transaction((t: Transaction) => {
-                return db.Category
+                return db.News
                     .findById(id)
-                    .then((category: CategoryInstance) => {
-                        throwError(!category, `Categoria com id ${id} não encontrado!`);
+                    .then((news: NewsInstance) => {
+                        throwError(!news, `Noticia com id ${id} não encontrado!`);
                         throwError(authUser.role != "ADMINA", `Não autorizado! Você não tem permissoes para isso!`);
-                        return category.update(input, {transaction: t});
+                        return news.update(input, {transaction: t});
                     });
             }).catch(handleError);
         }),
 
-        deleteCategory: compose(...authResolvers)((parent, {id}, {db, authUser}: {db: DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
+        deleteNews: compose(...authResolvers)((parent, {id}, {db, authUser}: {db: DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
             // id = parseInt(id);
             return db.sequelize.transaction((t: Transaction) => {
-                return db.Category
+                return db.News
                     .findById(id)
-                    .then((category: CategoryInstance) => {
-                        throwError(!category, `Categoria com id ${id} não encontrado!`);
+                    .then((news: NewsInstance) => {
+                        throwError(!news, `Categoria com id ${id} não encontrado!`);
                         throwError(authUser.role != "ADMINA", `Não autorizado! Você não tem permissoes para isso!`);
-                        return category.destroy({transaction: t})
-                            .then(category => !!category);
+                        return news.destroy({transaction: t})
+                            .then(news => !!news);
                     });
             }).catch(handleError);
         })
