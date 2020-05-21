@@ -22,9 +22,9 @@ export interface DataLoaders {
     proposeLoader: DataLoader<DataLoaderParam<number>, ProposeInstance>;
     addressLoader: DataLoader<DataLoaderParam<number>, AddressInstance>;
     chatLoader: DataLoader<DataLoaderParam<number>, ChatInstance>;
-    commentsLoader: DataLoader<DataLoaderParam<number>, CommentInstance>;
+    commentLoader: DataLoader<DataLoaderParam<number>, CommentInstance>;
     notificationLoader: DataLoader<DataLoaderParam<number>, NotificationInstance>;
     rankLoader: DataLoader<DataLoaderParam<number>, RankInstance>;
-    anunciosLoader: DataLoader<DataLoaderParam<number>, AnuncioInstance>;
+    anuncioLoader: DataLoader<DataLoaderParam<number>, AnuncioInstance>;
 
 }

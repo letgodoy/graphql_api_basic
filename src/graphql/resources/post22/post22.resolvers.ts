@@ -21,16 +21,16 @@ export const postResolvers = {
                 .catch(handleError);
         },
 
-        comments: (post, { first = 10, offset = 0 }, context: ResolverContext, info: GraphQLResolveInfo) => {
-            return context.db.Comment
-                .findAll({
-                    where: {post: post.get('id')},
-                    limit: first,
-                    offset: offset,
-                    attributes: context.requestedFields.getFields(info)
-                })
-                .catch(handleError);
-        }
+        // comments: (post, { first = 10, offset = 0 }, context: ResolverContext, info: GraphQLResolveInfo) => {
+        //     return context.db.Comment
+        //         .findAll({
+        //             where: {post: post.get('id')},
+        //             limit: first,
+        //             offset: offset,
+        //             attributes: context.requestedFields.getFields(info)
+        //         })
+        //         .catch(handleError);
+        // }
 
     },
 

@@ -11,7 +11,7 @@ export class UserLoader {
         return Promise.resolve(
             User.findAll({
                 where: { id: { $in: ids } },
-                attributes: requestedFields.getFields(params[0].info, {keep: ['id'], exclude: ['posts']})
+                attributes: requestedFields.getFields(params[0].info, {keep: ['id'], exclude: ['player']})
             })
         );
     }

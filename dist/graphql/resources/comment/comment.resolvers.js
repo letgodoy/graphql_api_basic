@@ -21,19 +21,7 @@ exports.commentResolvers = {
                 .catch(utils_1.handleError);
         }
     },
-    Query: {
-        commentsByPost: composable_resolver_1.compose()((parent, { postId, first = 10, offset = 0 }, { db, requestedFields }, info) => {
-            postId = parseInt(postId);
-            return db.Comment
-                .findAll({
-                where: { post: postId },
-                limit: first,
-                offset: offset,
-                attributes: requestedFields.getFields(info, { keep: undefined })
-            })
-                .catch(utils_1.handleError);
-        })
-    },
+    Query: {},
     Mutation: {
         createComment: composable_resolver_1.compose(...auth_resolver_1.authResolvers)((parent, { input }, { db, authUser }, info) => {
             input.from = authUser.player;

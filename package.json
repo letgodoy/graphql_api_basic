@@ -7,7 +7,7 @@
     "clusters": "set NODE_ENV=production port=8080 node dist/clusters",
     "build": "npm run gulp build",
     "start": "npm run build && npm run clusters",
-    "dev": "set NODE_ENV=development JWT_SECRET=iron_man node_modules/.bin/nodemon --delay 5 dist/index",
+    "dev": "SET NODE_ENV=development & SET JWT_SECRET=iron_man & nodemon --delay 5 dist/index",
     "gulp": "node_modules/.bin/gulp",
     "test": "set NODE_ENV=test JWT_SECRET=jwt_test mocha",
     "pipelines": "set NODE_ENV=pipelines JWT_SECRET=jwt_pipelines mocha",

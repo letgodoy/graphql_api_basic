@@ -10,16 +10,6 @@ exports.postResolvers = {
                 .load({ key: post.get('author'), info })
                 .catch(utils_1.handleError);
         },
-        comments: (post, { first = 10, offset = 0 }, context, info) => {
-            return context.db.Comment
-                .findAll({
-                where: { post: post.get('id') },
-                limit: first,
-                offset: offset,
-                attributes: context.requestedFields.getFields(info)
-            })
-                .catch(utils_1.handleError);
-        }
     },
     Query: {
         posts: (parent, { first = 10, offset = 0 }, context, info) => {
