@@ -33,7 +33,7 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
             defaultValue: null
         },
     }, {
-        tableName: 'Skillss'
+        tableName: 'Skillses'
     });
 
     Skills.associate = (models: ModelsInterface): void => {

@@ -15,7 +15,6 @@ export interface RankAttributes {
     pontualidadeC?: number;
     respeitoC?: number;
     resposta?: number;
-    skill?: string;
     solucao?: number;
     transparenciaC?: number;
     typeTo?: string;
@@ -88,11 +87,6 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
         },
         resposta: {
             type: DataTypes.NUMBER,
-            allowNull: true,
-            defaultValue: null
-        },
-        skill: {
-            type: DataTypes.STRING,
             allowNull: true,
             defaultValue: null
         },

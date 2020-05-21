@@ -5,7 +5,7 @@ const playerTypes = `
         createdAt: String!
         updatedAt: String
 
-        address: Address @relation(name: "PlayerAddress")
+        address: Address
         birthday: String
         chatsFrom: [Chat!]! @relation(name: "ChatFrom")
         chatsTo: [Chat!]! @relation(name: "ChatTo")
@@ -15,17 +15,17 @@ const playerTypes = `
         document: String
         email: String!
         name: String!
-        notifications: [Notification!]! @relation(name: "NotificationPlayer")
-        phone: String
+        notifications: [Notification!]!
+        phone: String!
         proposes: [Propose!]! @relation(name: "ProposeTo")
         proposesFrom: [Propose!]! @relation(name: "ProposeFrom")
         ranks: [Rank!]! @relation(name: "RankOnPlayer")
-        status: Boolean
+        status: Boolean!
         type: TYPE!
-        user: User @relation(name: "UserOnPlayer")
-        anuncioses: [Anuncios!]! @relation(name: "AnunciosOnPlayer")
-        phoneverif: Boolean
-        photo: File @relation(name: "PlayerOnFile")
+        user: User!
+        anuncioses: [Anuncios!]!
+        phoneverif: Boolean!
+        photo: String
         ranksmaked: [Rank!]! @relation(name: "RankMakedOnPlayer")
 
     }
@@ -36,13 +36,16 @@ const playerTypes = `
       }
 
     input PlayerInput {
-        active: Boolean
-        description: String!
-        files: [File!]!
-        player: Player
-        price: String
-        proposes: [Propose!]!
-        skills: Skills
+        birthday: String
+        description: String
+        document: String
+        email: String!
+        name: String!
+        phone: String!
+        status: Boolean!
+        type: TYPE!
+        phoneverif: Boolean!
+        photo: String
     }
 
 `;
@@ -54,8 +57,8 @@ const playerQueries = `
 
 const playerMutations = `
     createPlayer(input: PlayerInput!): Player
-    updatePlayer(id: ID!, input: PlayerInput!): Player
-    deletePlayer(id: ID!): Boolean
+    updatePlayer(input: PlayerInput!): Player
+    deletePlayer: Boolean
 `;
 
 export {

@@ -4,22 +4,17 @@ const postTypes = `
         id: ID!
         title: String!
         content: String!
-        file: String!
-        thumbnail: String!
-        published: Boolean!
-        categoria: String
-        user: User!
-        cretedAt: String!
-        updatedAt: String
+        photo: String!
+        createdAt: String!
+        updated: String!
+        author: User!
+        comments(first: Int, offset: Int): [ Comment! ]!
     }
 
     input PostInput {
         title: String!
         content: String!
-        file: String!
-        thumbnail: String!
-        published: Boolean!
-        categoria: String
+        photo: String!
     }
 
 `;

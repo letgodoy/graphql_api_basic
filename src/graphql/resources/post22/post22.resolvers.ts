@@ -15,9 +15,20 @@ export const postResolvers = {
 
     Post: {
 
-        user: (post, args, {db, dataloaders: {userLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {  
+        author: (post, args, {db, dataloaders: {userLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {  
             return userLoader
-                .load({key: post.get('user'), info})
+                .load({key: post.get('author'), info})
+                .catch(handleError);
+        },
+
+        comments: (post, { first = 10, offset = 0 }, context: ResolverContext, info: GraphQLResolveInfo) => {
+            return context.db.Comment
+                .findAll({
+                    where: {post: post.get('id')},
+                    limit: first,
+                    offset: offset,
+                    attributes: context.requestedFields.getFields(info)
+                })
                 .catch(handleError);
         }
 
@@ -30,7 +41,7 @@ export const postResolvers = {
                 .findAll({
                     limit: first,
                     offset: offset,
-                    attributes: context.requestedFields.getFields(info, {keep: ['id']})
+                    attributes: context.requestedFields.getFields(info, {keep: ['id'], exclude: ['comments']})
                 }).catch(handleError);
         },
 
@@ -38,10 +49,10 @@ export const postResolvers = {
             id = parseInt(id);
             return context.db.Post
                 .findById(id, {
-                    attributes: context.requestedFields.getFields(info, {keep: ['id']})
+                    attributes: context.requestedFields.getFields(info, {keep: ['id'], exclude: ['comments']})
                 })
                 .then((post: PostInstance) => {
-                    throwError(!post, `Post com id ${id} não encontrado!`);
+                    throwError(!post, `Post with id ${id} not found!`);
                     return post;
                 }).catch(handleError);
         }
@@ -51,9 +62,8 @@ export const postResolvers = {
     Mutation: {
 
         createPost: compose(...authResolvers)((parent, { input }, {db, authUser}: {db: DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
-            input.user = authUser.id;
+            input.author = authUser.id;
             return db.sequelize.transaction((t: Transaction) => {
-                throwError(authUser.role != "ADMINA", `Não autorizado! Você não tem permissoes para isso!`);
                 return db.Post
                     .create(input, {transaction: t});
             }).catch(handleError);
@@ -65,9 +75,9 @@ export const postResolvers = {
                 return db.Post
                     .findById(id)
                     .then((post: PostInstance) => {
-                        throwError(!post, `Post com id ${id} não encontrado!`);
-                        throwError(post.get('user') != authUser.id, `Unauthorized! You can only edit posts by yourself!`);
-                        throwError(authUser.role != "ADMINA", `Não autorizado! Você não tem permissoes para isso!`);
+                        throwError(!post, `Post with id ${id} not found!`);
+                        throwError(post.get('author') != authUser.id, `Unauthorized! You can only edit posts by yourself!`);
+                        input.author = authUser.id;
                         return post.update(input, {transaction: t});
                     });
             }).catch(handleError);
@@ -79,9 +89,8 @@ export const postResolvers = {
                 return db.Post
                     .findById(id)
                     .then((post: PostInstance) => {
-                        throwError(!post, `Post com id ${id} não encontrado!`);
-                        throwError(post.get('user') != authUser.id, `Unauthorized! You can only delete posts by yourself!`);
-                        throwError(authUser.role != "ADMINA", `Não autorizado! Você não tem permissoes para isso!`);
+                        throwError(!post, `Post with id ${id} not found!`);
+                        throwError(post.get('author') != authUser.id, `Unauthorized! You can only delete posts by yourself!`);
                         return post.destroy({transaction: t})
                             .then(post => !!post);
                     });

@@ -8,52 +8,100 @@ import { authResolvers } from "../../composable/auth.resolver";
 import { AuthUser } from "../../../interfaces/AuthUserInterface";
 import { DataLoaders } from "../../../interfaces/DataLoadersInterface";
 import { ResolverContext } from "../../../interfaces/ResolverContextInterface";
-import { AnuncioInstance } from "../../../models/AnuncioModel";
+import { PlayerInstance } from "../../../models/PlayerModel";
 
-export const anuncioResolvers = {
+export const playerResolvers = {
 
-    Anuncio: {
+    Player: {
 
-        player: (anuncio, args, {db, dataloaders: {playerLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
-            return playerLoader
-                .load({key: anuncio.get('player'), info})
+        address: (player, args, {db, dataloaders: {addressLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return addressLoader
+                .load({key: player.get('address'), info})
                 .catch(handleError);
         },
 
-        proposta: (anuncio, args, {db, dataloaders: {proposeLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+        chatsFrom: (player, args, {db, dataloaders: {chatLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return chatLoader
+                .load({key: player.get('chatsFrom'), info})
+                .catch(handleError);
+        },
+
+        chatsTo: (player, args, {db, dataloaders: {chatLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return chatLoader
+                .load({key: player.get('chatsTo'), info})
+                .catch(handleError);
+        },
+
+        commentsTo: (player, args, {db, dataloaders: {commentsLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return commentsLoader
+                .load({key: player.get('commentsTo'), info})
+                .catch(handleError);
+        },
+
+        commentsfrom: (player, args, {db, dataloaders: {commentsLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return commentsLoader
+                .load({key: player.get('commentsfrom'), info})
+                .catch(handleError);
+        },
+
+        notifications: (player, args, {db, dataloaders: {notificationLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return notificationLoader
+                .load({key: player.get('notifications'), info})
+                .catch(handleError);
+        },
+
+        proposes: (player, args, {db, dataloaders: {proposeLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
             return proposeLoader
-                .load({key: anuncio.get('proposes'), info})
+                .load({key: player.get('proposes'), info})
                 .catch(handleError);
         },
 
-        skills: (anuncio, args, {db, dataloaders: {skillsLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
-            return skillsLoader
-                .load({key: anuncio.get('skills'), info})
+        proposesFrom: (player, args, {db, dataloaders: {proposeLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return proposeLoader
+                .load({key: player.get('proposesFrom'), info})
                 .catch(handleError);
-        }
+        },
+
+        ranks: (player, args, {db, dataloaders: {rankLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return rankLoader
+                .load({key: player.get('ranks'), info})
+                .catch(handleError);
+        },
+
+        anuncioses: (player, args, {db, dataloaders: {anunciosLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return anunciosLoader
+                .load({key: player.get('anuncioses'), info})
+                .catch(handleError);
+        },
+
+        ranksmaked: (player, args, {db, dataloaders: {rankLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return rankLoader
+                .load({key: player.get('ranksmaked'), info})
+                .catch(handleError);
+        },
 
     },
 
     Query: {
 
-        allAnuncioes: (parent, { first = 50, offset = 0 }, context: ResolverContext, info: GraphQLResolveInfo) => {
-            return context.db.Anuncio
+        allPlayers: (parent, { first = 50, offset = 0 }, context: ResolverContext, info: GraphQLResolveInfo) => {
+            return context.db.Player
                 .findAll({
                     limit: first,
                     offset: offset,
-                    attributes: context.requestedFields.getFields(info, {keep: ['id'], exclude: ['anuncios']})
+                    attributes: context.requestedFields.getFields(info, {keep: ['id'], exclude: ['Players']})
                 }).catch(handleError);
         },
 
-        anuncio: (parent, { id }, context: ResolverContext, info: GraphQLResolveInfo) => {
+        player: (parent, { id }, context: ResolverContext, info: GraphQLResolveInfo) => {
             id = parseInt(id);
-            return context.db.Anuncio
+            return context.db.Player
                 .findById(id, {
-                    attributes: context.requestedFields.getFields(info, {keep: ['id'], exclude: ['anuncios']})
+                    attributes: context.requestedFields.getFields(info, {keep: ['id'], exclude: ['Players']})
                 })
-                .then((anuncio: AnuncioInstance) => {
-                    throwError(!anuncio, `Anuncio com id ${id} não encontrado!`);
-                    return anuncio;
+                .then((player: PlayerInstance) => {
+                    throwError(!player, `Perfil com id ${id} não encontrado!`);
+                    return player;
                 }).catch(handleError);
         }
 
@@ -61,38 +109,37 @@ export const anuncioResolvers = {
 
     Mutation: {
 
-        createAnuncio: compose(...authResolvers)((parent, {input}, {db, authUser}: {db: DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
-            input.player = authUser.player;
+        createPlayer: compose(...authResolvers)((parent, {input}, {db, authUser}: {db: DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
+            input.user = authUser.id;
             return db.sequelize.transaction((t: Transaction) => {
-                return db.Anuncio
+                return db.Player
                     .create(input, {transaction: t});
             }).catch(handleError);
         }),
 
-        updateAnuncio: compose(...authResolvers)((parent, {id, input}, {db, authUser}: {db: DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
+        updatePlayer: compose(...authResolvers)((parent, {id, input}, {db, authUser}: {db: DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
             // id = parseInt(id);
             return db.sequelize.transaction((t: Transaction) => {
-                return db.Anuncio
-                    .findById(id)
-                    .then((Anuncio: AnuncioInstance) => {
-                        throwError(!Anuncio, `Anuncio com id ${id} não encontrado!`);
-                        throwError(Anuncio.get('player') != authUser.player, `Não autorizado! Você só pode alterar seus proprios anuncios!`);
-                        input.player = authUser.player;
-                        return Anuncio.update(input, {transaction: t});
+                return db.Player
+                    .findById(authUser.player)
+                    .then((player: PlayerInstance) => {
+                        throwError(!player, `Player com id ${authUser.player} não encontrado!`);
+                        throwError(player.get('user') != authUser.id, `Não autorizado! Você só pode alterar seus proprios Perfil!`);
+                        return player.update(input, {transaction: t});
                     });
             }).catch(handleError);
         }),
 
-        deleteAnuncio: compose(...authResolvers)((parent, {id}, {db, authUser}: {db: DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
+        deletePlayer: compose(...authResolvers)((parent, args, {db, authUser}: {db: DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
             // id = parseInt(id);
             return db.sequelize.transaction((t: Transaction) => {
-                return db.Anuncio
-                    .findById(id)
-                    .then((anuncio: AnuncioInstance) => {
-                        throwError(!anuncio, `Anuncio com id ${id} não encontrado!`);
-                        throwError(anuncio.get('player') != authUser.player, `Não autorizado! Você só pode alterar seus proprios anuncios!`);
-                        return anuncio.destroy({transaction: t})
-                            .then(anuncio => !!anuncio);
+                return db.Player
+                    .findById(authUser.player)
+                    .then((player: PlayerInstance) => {
+                        throwError(!player, `Perfil com id ${authUser.player} não encontrado!`);
+                        throwError(player.get('user') != authUser.id, `Não autorizado! Você só pode alterar seus proprios Perfil!`);
+                        return player.destroy({transaction: t})
+                            .then(player => !!player);
                     });
             }).catch(handleError);
         })
