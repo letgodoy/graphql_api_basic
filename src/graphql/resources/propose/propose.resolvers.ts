@@ -14,8 +14,8 @@ export const proposeResolvers = {
 
     Propose: {
 
-        anuncio: (propose, args, {db, dataloaders: {anunciosLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
-            return anunciosLoader
+        anuncio: (propose, args, {db, dataloaders: {anuncioLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return anuncioLoader
                 .load({key: propose.get('anuncios'), info})
                 .catch(handleError);
         },

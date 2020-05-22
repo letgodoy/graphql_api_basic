@@ -32,14 +32,14 @@ export const playerResolvers = {
                 .catch(handleError);
         },
 
-        commentsTo: (player, args, {db, dataloaders: {commentsLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
-            return commentsLoader
+        commentsTo: (player, args, {db, dataloaders: {commentLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return commentLoader
                 .load({key: player.get('commentsTo'), info})
                 .catch(handleError);
         },
 
-        commentsfrom: (player, args, {db, dataloaders: {commentsLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
-            return commentsLoader
+        commentsfrom: (player, args, {db, dataloaders: {commentLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return commentLoader
                 .load({key: player.get('commentsfrom'), info})
                 .catch(handleError);
         },
@@ -68,8 +68,8 @@ export const playerResolvers = {
                 .catch(handleError);
         },
 
-        anuncioses: (player, args, {db, dataloaders: {anunciosLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
-            return anunciosLoader
+        anuncioses: (player, args, {db, dataloaders: {anuncioLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return anuncioLoader
                 .load({key: player.get('anuncioses'), info})
                 .catch(handleError);
         },

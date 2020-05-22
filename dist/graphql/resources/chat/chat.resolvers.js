@@ -5,12 +5,17 @@ const composable_resolver_1 = require("../../composable/composable.resolver");
 const auth_resolver_1 = require("../../composable/auth.resolver");
 exports.chatResolvers = {
     Chat: {
-        player: (chat, args, { db, dataloaders: { playerLoader } }, info) => {
+        from: (chat, args, { db, dataloaders: { playerLoader } }, info) => {
             return playerLoader
-                .load({ key: chat.get('player'), info })
+                .load({ key: chat.get('from'), info })
                 .catch(utils_1.handleError);
         },
-        proposta: (chat, args, { db, dataloaders: { proposeLoader } }, info) => {
+        to: (chat, args, { db, dataloaders: { playerLoader } }, info) => {
+            return playerLoader
+                .load({ key: chat.get('to'), info })
+                .catch(utils_1.handleError);
+        },
+        propose: (chat, args, { db, dataloaders: { proposeLoader } }, info) => {
             return proposeLoader
                 .load({ key: chat.get('proposes'), info })
                 .catch(utils_1.handleError);

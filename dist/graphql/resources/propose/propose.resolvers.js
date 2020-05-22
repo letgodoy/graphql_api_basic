@@ -5,8 +5,8 @@ const composable_resolver_1 = require("../../composable/composable.resolver");
 const auth_resolver_1 = require("../../composable/auth.resolver");
 exports.proposeResolvers = {
     Propose: {
-        anuncio: (propose, args, { db, dataloaders: { anunciosLoader } }, info) => {
-            return anunciosLoader
+        anuncio: (propose, args, { db, dataloaders: { anuncioLoader } }, info) => {
+            return anuncioLoader
                 .load({ key: propose.get('anuncios'), info })
                 .catch(utils_1.handleError);
         },

@@ -20,13 +20,13 @@ exports.playerResolvers = {
                 .load({ key: player.get('chatsTo'), info })
                 .catch(utils_1.handleError);
         },
-        commentsTo: (player, args, { db, dataloaders: { commentsLoader } }, info) => {
-            return commentsLoader
+        commentsTo: (player, args, { db, dataloaders: { commentLoader } }, info) => {
+            return commentLoader
                 .load({ key: player.get('commentsTo'), info })
                 .catch(utils_1.handleError);
         },
-        commentsfrom: (player, args, { db, dataloaders: { commentsLoader } }, info) => {
-            return commentsLoader
+        commentsfrom: (player, args, { db, dataloaders: { commentLoader } }, info) => {
+            return commentLoader
                 .load({ key: player.get('commentsfrom'), info })
                 .catch(utils_1.handleError);
         },
@@ -50,8 +50,8 @@ exports.playerResolvers = {
                 .load({ key: player.get('ranks'), info })
                 .catch(utils_1.handleError);
         },
-        anuncioses: (player, args, { db, dataloaders: { anunciosLoader } }, info) => {
-            return anunciosLoader
+        anuncioses: (player, args, { db, dataloaders: { anuncioLoader } }, info) => {
+            return anuncioLoader
                 .load({ key: player.get('anuncioses'), info })
                 .catch(utils_1.handleError);
         },

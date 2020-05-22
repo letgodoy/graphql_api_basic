@@ -10,7 +10,7 @@ exports.anuncioResolvers = {
                 .load({ key: anuncio.get('player'), info })
                 .catch(utils_1.handleError);
         },
-        proposta: (anuncio, args, { db, dataloaders: { proposeLoader } }, info) => {
+        proposes: (anuncio, args, { db, dataloaders: { proposeLoader } }, info) => {
             return proposeLoader
                 .load({ key: anuncio.get('proposes'), info })
                 .catch(utils_1.handleError);
