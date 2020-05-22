@@ -14,13 +14,19 @@ export const chatResolvers = {
 
     Chat: {
 
-        player: (chat, args, {db, dataloaders: {playerLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+        from: (chat, args, {db, dataloaders: {playerLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
             return playerLoader
-                .load({key: chat.get('player'), info})
+                .load({key: chat.get('from'), info})
                 .catch(handleError);
         },
 
-        proposta: (chat, args, {db, dataloaders: {proposeLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+        to: (chat, args, {db, dataloaders: {playerLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return playerLoader
+                .load({key: chat.get('to'), info})
+                .catch(handleError);
+        },
+
+        propose: (chat, args, {db, dataloaders: {proposeLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
             return proposeLoader
                 .load({key: chat.get('proposes'), info})
                 .catch(handleError);

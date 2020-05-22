@@ -19,6 +19,13 @@ import { RankInstance } from '../../models/RankModel';
 import { AnuncioInstance } from '../../models/AnuncioModel';
 import { PlayerLoader } from './playerLoader';
 import { SkillsLoader } from './SkillsLoader';
+import { NotificationLoader } from './NotificationLoader';
+import { AnuncioLoader } from './AnuncioLoader';
+import { AddressLoader } from './AddressLoader';
+import { RankLoader } from './RankLoader';
+import { CommentLoader } from './CommentLoader';
+import { ChatLoader } from './ChatLoader';
+import { ProposeLoader } from './ProposeLoader';
 
 export class DataLoaderFactory {
 
@@ -38,39 +45,39 @@ export class DataLoaderFactory {
                 { cacheKeyFn: (param: DataLoaderParam<number[]>) => param.key }
             ),
             playerLoader: new DataLoader<DataLoaderParam<number>, PlayerInstance>(
-                (params: DataLoaderParam<number>[]) => PlayerLoader.batchPosts(this.db.Player, params, this.requestedFields),
+                (params: DataLoaderParam<number>[]) => PlayerLoader.batchPlayers(this.db.Player, params, this.requestedFields),
                 { cacheKeyFn: (param: DataLoaderParam<number[]>) => param.key }
             ),
             skillsLoader: new DataLoader<DataLoaderParam<number>, SkillsInstance>(
-                (params: DataLoaderParam<number>[]) => SkillsLoader.batchPosts(this.db.Skills, params, this.requestedFields),
+                (params: DataLoaderParam<number>[]) => SkillsLoader.batchSkillss(this.db.Skills, params, this.requestedFields),
                 { cacheKeyFn: (param: DataLoaderParam<number[]>) => param.key }
             ),
             proposeLoader: new DataLoader<DataLoaderParam<number>, ProposeInstance>(
-                (params: DataLoaderParam<number>[]) => ProposeLoader.batchPosts(this.db.Propose, params, this.requestedFields),
+                (params: DataLoaderParam<number>[]) => ProposeLoader.batchProposes(this.db.Propose, params, this.requestedFields),
                 { cacheKeyFn: (param: DataLoaderParam<number[]>) => param.key }
             ),
             addressLoader: new DataLoader<DataLoaderParam<number>, AddressInstance>(
-                (params: DataLoaderParam<number>[]) => AddressLoader.batchPosts(this.db.Address, params, this.requestedFields),
+                (params: DataLoaderParam<number>[]) => AddressLoader.batchAddresss(this.db.Address, params, this.requestedFields),
                 { cacheKeyFn: (param: DataLoaderParam<number[]>) => param.key }
             ),
             chatLoader: new DataLoader<DataLoaderParam<number>, ChatInstance>(
-                (params: DataLoaderParam<number>[]) => ChatLoader.batchPosts(this.db.Chat, params, this.requestedFields),
+                (params: DataLoaderParam<number>[]) => ChatLoader.batchChats(this.db.Chat, params, this.requestedFields),
                 { cacheKeyFn: (param: DataLoaderParam<number[]>) => param.key }
             ),
             commentLoader: new DataLoader<DataLoaderParam<number>, CommentInstance>(
-                (params: DataLoaderParam<number>[]) => CommentLoader.batchPosts(this.db.Comment, params, this.requestedFields),
+                (params: DataLoaderParam<number>[]) => CommentLoader.batchComments(this.db.Comment, params, this.requestedFields),
                 { cacheKeyFn: (param: DataLoaderParam<number[]>) => param.key }
             ),
             notificationLoader: new DataLoader<DataLoaderParam<number>, NotificationInstance>(
-                (params: DataLoaderParam<number>[]) => NotificationLoader.batchPosts(this.db.Notification, params, this.requestedFields),
+                (params: DataLoaderParam<number>[]) => NotificationLoader.batchNotifications(this.db.Notification, params, this.requestedFields),
                 { cacheKeyFn: (param: DataLoaderParam<number[]>) => param.key }
             ),
             rankLoader: new DataLoader<DataLoaderParam<number>, RankInstance>(
-                (params: DataLoaderParam<number>[]) => RankLoader.batchPosts(this.db.Rank, params, this.requestedFields),
+                (params: DataLoaderParam<number>[]) => RankLoader.batchRanks(this.db.Rank, params, this.requestedFields),
                 { cacheKeyFn: (param: DataLoaderParam<number[]>) => param.key }
             ),
             anuncioLoader: new DataLoader<DataLoaderParam<number>, AnuncioInstance>(
-                (params: DataLoaderParam<number>[]) => AnuncioLoader.batchPosts(this.db.Anuncio, params, this.requestedFields),
+                (params: DataLoaderParam<number>[]) => AnuncioLoader.batchAnuncios(this.db.Anuncio, params, this.requestedFields),
                 { cacheKeyFn: (param: DataLoaderParam<number[]>) => param.key }
             )
 

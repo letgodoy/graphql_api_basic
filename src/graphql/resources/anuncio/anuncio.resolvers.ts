@@ -20,7 +20,7 @@ export const anuncioResolvers = {
                 .catch(handleError);
         },
 
-        proposta: (anuncio, args, {db, dataloaders: {proposeLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+        proposes: (anuncio, args, {db, dataloaders: {proposeLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
             return proposeLoader
                 .load({key: anuncio.get('proposes'), info})
                 .catch(handleError);
