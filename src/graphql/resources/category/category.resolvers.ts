@@ -20,7 +20,7 @@ export const categoryResolvers = {
                 .catch(handleError);
         },
 
-        skills: (category, args, {db, dataloaders: {skillsLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+        skillses: (category, args, {db, dataloaders: {skillsLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
             return skillsLoader
                 .load({key: category.get('skillses'), info})
                 .catch(handleError);

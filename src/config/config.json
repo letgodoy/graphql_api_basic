@@ -1,10 +1,19 @@
 {
+  "local": {
+    "username": "root",
+    "password": "root",
+    "database": "oito_development",
+    "dialect": "mysql",
+    "host": "127.0.0.1",
+    "port": 3306
+  },
   "development": {
     "username": "root",
     "password": "Loveevan1609",
     "database": "oito_development",
+    "dialect": "mysql",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "port": 3306
   },
   "test": {
     "username": "root",

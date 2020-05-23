@@ -7,15 +7,14 @@ const categoryTypes = `
         name: String!
         description: String
         image: String!
-        user: User!
+        user: User
         skillses: [Skills!]!
     }
 
     input CategoryInput {
         name: String!
         description: String
-        image: File!
-        files: [File!]!
+        image: String!
     }
 
 `;

@@ -6,21 +6,20 @@ const anuncioTypes = `
         updatedAt: String
         active: Boolean
         description: String!
-        files: [File!]!
+        files: String
         player: Player
         price: String
         proposes: [Propose!]!
-        skills: Skills
+        skills: Skills!
     }
 
     input AnuncioInput {
         active: Boolean
         description: String!
-        files: [File!]!
-        player: Player
+        files: String
         price: String
-        proposes: [Propose!]!
-        skills: Skills
+        proposes: ID!
+        skills: ID!
     }
 
 `;

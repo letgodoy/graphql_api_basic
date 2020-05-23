@@ -21,8 +21,12 @@ const commentTypes = `
       }
 
     input CommentInput {
-        comment: String!
-        post: Int!
+        description: String!
+        reply: String
+        typeTo: TYPE!
+        rating: RATING!
+        to: ID!
+        propose: ID!
     }
 
 `;

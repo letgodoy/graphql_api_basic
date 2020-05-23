@@ -6,7 +6,7 @@ const habilidadeTypes = `
         updatedAt: String
         name: String!
         cadastro: Boolean!
-        player: Player!
+        player: ID
     }
 
     input HabilidadeInput {
@@ -17,7 +17,7 @@ const habilidadeTypes = `
 `;
 
 const habilidadeQueries = `
-    allCategories(first: Int, offset: Int): [ Habilidade! ]!
+    allHabilidades(first: Int, offset: Int): [ Habilidade! ]!
     habilidade(id: ID!): Habilidade
 `;
 

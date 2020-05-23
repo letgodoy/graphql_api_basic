@@ -17,7 +17,7 @@ import { addressResolvers } from './resources/address/address.resolvers';
 import { anuncioResolvers } from './resources/anuncio/anuncio.resolvers';
 import { categoryResolvers } from './resources/category/category.resolvers';
 import { chatResolvers } from './resources/chat/chat.resolvers';
-import { habilidadeResolvers } from './resources/habilidade/hablilidade.resolvers';
+import { habilidadeResolvers } from './resources/habilidade/habilidade.resolvers';
 import { newsResolvers } from './resources/news/news.resolvers';
 import { notificationResolvers } from './resources/notifications/notifications.resolvers';
 import { playerResolvers } from './resources/player/player.resolvers';

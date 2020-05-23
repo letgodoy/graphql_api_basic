@@ -11,7 +11,7 @@ const skillsTypes = `
 
     input SkillsInput {
         name: String!
-        category: Category!
+        category: ID!
     }
 
 `;

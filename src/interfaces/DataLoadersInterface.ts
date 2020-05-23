@@ -12,6 +12,7 @@ import { CommentInstance } from '../models/CommentsModel';
 import { NotificationInstance } from '../models/NotificationModel';
 import { RankInstance } from '../models/RankModel';
 import { AnuncioInstance } from '../models/AnuncioModel';
+import { CategoryInstance } from '../models/CategoryModel';
 
 export interface DataLoaders {
 
@@ -26,5 +27,6 @@ export interface DataLoaders {
     notificationLoader: DataLoader<DataLoaderParam<number>, NotificationInstance>;
     rankLoader: DataLoader<DataLoaderParam<number>, RankInstance>;
     anuncioLoader: DataLoader<DataLoaderParam<number>, AnuncioInstance>;
+    categoryLoader: DataLoader<DataLoaderParam<number>, CategoryInstance>;
 
 }

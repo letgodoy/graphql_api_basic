@@ -16,7 +16,6 @@ const notificationTypes = `
         status: Boolean!
         date: String!
         link: String
-        player: Player!
     }
 
 `;

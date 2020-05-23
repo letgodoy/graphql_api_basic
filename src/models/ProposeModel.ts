@@ -40,9 +40,9 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
     const Propose: ProposeModel = sequelize.define('Propose', {
         id: {
             type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV1,
             primaryKey: true,
-            allowNull: false,
-            autoIncrement: true
+            allowNull: false
         },
         date: {
             type: DataTypes.STRING,

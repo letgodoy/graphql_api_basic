@@ -25,10 +25,10 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
     const User: UserModel = 
         sequelize.define('User', {
             id: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.UUID,
+                defaultValue: DataTypes.UUIDV1,
                 allowNull: false,
-                primaryKey: true,
-                autoIncrement: true
+                primaryKey: true
             },
             email: {
                 type: DataTypes.STRING(128),

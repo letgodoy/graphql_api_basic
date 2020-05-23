@@ -88,7 +88,7 @@ export const chatResolvers = {
                     .findById(id)
                     .then((chat: ChatInstance) => {
                         throwError(!chat, `Mensagem com id ${id} não encontrado!`);
-                        throwError(chat.get('player') != authUser.player, `Não autorizado! Você só pode alterar seus proprios mensagens!`);
+                        throwError(chat.get('from') != authUser.player, `Não autorizado! Você só pode alterar seus proprios mensagens!`);
                         return chat.destroy({transaction: t})
                             .then(chat => !!chat);
                     });

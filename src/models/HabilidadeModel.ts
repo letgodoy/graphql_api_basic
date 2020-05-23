@@ -22,9 +22,9 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
     const Habilidade: HabilidadeModel = sequelize.define('Habilidade', {
         id: {
             type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV1,
             primaryKey: true,
-            allowNull: false,
-            autoIncrement: true
+            allowNull: false
         },
         name: {
             type: DataTypes.STRING(128),

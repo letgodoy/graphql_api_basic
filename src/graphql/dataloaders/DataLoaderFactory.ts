@@ -26,6 +26,8 @@ import { RankLoader } from './RankLoader';
 import { CommentLoader } from './CommentLoader';
 import { ChatLoader } from './ChatLoader';
 import { ProposeLoader } from './ProposeLoader';
+import { CategoryInstance } from '../../models/CategoryModel';
+import { CategoryLoader } from './CategoryLoader';
 
 export class DataLoaderFactory {
 
@@ -78,6 +80,10 @@ export class DataLoaderFactory {
             ),
             anuncioLoader: new DataLoader<DataLoaderParam<number>, AnuncioInstance>(
                 (params: DataLoaderParam<number>[]) => AnuncioLoader.batchAnuncios(this.db.Anuncio, params, this.requestedFields),
+                { cacheKeyFn: (param: DataLoaderParam<number[]>) => param.key }
+            ),
+            categoryLoader: new DataLoader<DataLoaderParam<number>, CategoryInstance>(
+                (params: DataLoaderParam<number>[]) => CategoryLoader.batchCategorys(this.db.Category, params, this.requestedFields),
                 { cacheKeyFn: (param: DataLoaderParam<number[]>) => param.key }
             )
 

@@ -62,7 +62,7 @@ export const proposeResolvers = {
     Mutation: {
 
         createPropose: compose(...authResolvers)((parent, {input}, {db, authUser}: {db: DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
-            input.user = authUser.id;
+            input.from = authUser.player;
             return db.sequelize.transaction((t: Transaction) => {
                 return db.Propose
                     .create(input, {transaction: t});

@@ -48,8 +48,8 @@ const proposeTypes = `
         location: String
         locationF: String
 
-        to: Player!
-        anuncio: Anuncios!
+        to: ID!
+        anuncio: ID!
     }
 
 `;

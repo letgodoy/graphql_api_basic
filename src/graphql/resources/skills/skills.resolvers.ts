@@ -18,12 +18,6 @@ export const skillsResolvers = {
             return userLoader
                 .load({key: skills.get('user'), info})
                 .catch(handleError);
-        },
-
-        skills: (skills, args, {db, dataloaders: {skillsLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
-            return skillsLoader
-                .load({key: skills.get('skillses'), info})
-                .catch(handleError);
         }
 
     },

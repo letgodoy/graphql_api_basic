@@ -9,8 +9,6 @@ export interface CategoryAttributes {
     name?: string;
     image?: string;
 
-    skillses?: string;
-
     user?: number;
     createdAt?: string;
     updatedAt?: string;
@@ -25,9 +23,9 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
     const Category: CategoryModel = sequelize.define('Category', {
         id: {
             type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV1,
             primaryKey: true,
-            allowNull: false,
-            autoIncrement: true
+            allowNull: false
         },
         description: {
             type: DataTypes.STRING(128),
@@ -48,14 +46,6 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
     });
 
     Category.associate = (models: ModelsInterface): void => {
-
-        Category.belongsTo(models.Skills, {
-            foreignKey: {
-                allowNull: false,
-                field: 'skillses',
-                name: 'skillses'
-            }
-        });
 
         Category.belongsTo(models.User, {
             foreignKey: {
