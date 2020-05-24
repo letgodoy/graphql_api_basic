@@ -9,6 +9,8 @@ export interface UserAttributes {
     email?: string;
     password?: string;
     role?: string;
+
+    player?: string;
     
     createdAt?: string;
     updatedAt?: string;
@@ -64,7 +66,17 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
             }
         });
 
-        User.associate = (models: ModelsInterface): void => {};
+        User.associate = (models: ModelsInterface): void => {
+
+            User.belongsTo(models.Player, {
+                foreignKey: {
+                    allowNull: true,
+                    field: 'player',
+                    name: 'player'
+                }
+            });
+
+        };
 
         User.prototype.isPassword = (encodedPassword: string, password: string): boolean => {
             return compareSync(password, encodedPassword);

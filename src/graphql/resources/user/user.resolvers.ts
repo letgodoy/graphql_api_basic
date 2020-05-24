@@ -94,6 +94,18 @@ export const userResolvers = {
             }).catch(handleError);
         }),
 
+        recoverUserPassword: (parent, {id, input}, {db}: {db: DbConnection}, info: GraphQLResolveInfo) => {
+            return db.sequelize.transaction((t: Transaction) => {
+                return db.User
+                    .findById(id)
+                    .then((user: UserInstance) => {
+                        throwError(!user, `Usuário com id ${id} não encontrado!`);
+                        return user.update(input, {transaction: t})
+                            .then((user: UserInstance) => !!user);
+                    });
+            }).catch(handleError);
+        },
+
         deleteUser: compose(...authResolvers)((parent, args, {db, authUser}: {db: DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
             return db.sequelize.transaction((t: Transaction) => {
                 return db.User

@@ -17,7 +17,7 @@ export const tokenResolvers = {
                 let errorMessage: string = 'Não autorizado, e-mail ou senha errados!';
                 if (!user || !user.isPassword(user.get('password'), password)) { throw new Error(errorMessage); }
 
-                const payload = {sub: user.get('playerId')};
+                const payload = {sub: user.get('player')};
 
                 return {
                     token: jwt.sign(payload, JWT_SECRET)

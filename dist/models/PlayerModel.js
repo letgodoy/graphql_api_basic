@@ -1,33 +1,7 @@
-import * as Sequelize from 'sequelize';
-
-import { BaseModelInterface } from '../interfaces/BaseModelInterface';
-import { ModelsInterface } from '../interfaces/ModelsInterface';
-
-export interface PlayerAttributes {
-    id?: string;
-    avatar?: string;
-    birthday?: string;
-    description?: string;
-    document?: string;
-    email?: string;
-    name?: string;
-    phone?: string;
-    status?: boolean;
-    type?: string;
-    phoneverif?: boolean;
-    photo?: string;
-
-    createdAt?: string;
-    updatedAt?: string;
-}
-
-export interface PlayerInstance extends Sequelize.Instance<PlayerAttributes> {}
-
-export interface PlayerModel extends BaseModelInterface, Sequelize.Model<PlayerInstance, PlayerAttributes> {}
-
-export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes): PlayerModel => {
-
-    const Player: PlayerModel = sequelize.define('Player', {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = (sequelize, DataTypes) => {
+    const Player = sequelize.define('Player', {
         id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV1,
@@ -86,9 +60,7 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
     }, {
         tableName: 'Players'
     });
-
     // Player.associate = (models: ModelsInterface): void => {
-
     //     Player.belongsTo(models.User, {
     //         foreignKey: {
     //             allowNull: false,
@@ -96,9 +68,6 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
     //             name: 'user'
     //         }
     //     });
-
     // };
-
     return Player;
-
 };
