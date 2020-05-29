@@ -24,7 +24,14 @@ export const categoryResolvers = {
             return skillsLoader
                 .load({key: category.get('skillses'), info})
                 .catch(handleError);
+        },
+
+        file: (category, args, {db, dataloaders: {fileLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return fileLoader
+                .load({key: category.get('file'), info})
+                .catch(handleError);
         }
+
 
     },
 

@@ -11,6 +11,7 @@ export interface AnuncioAttributes {
 
     player?: string;
     skills?: string;
+    files?: string;
 
     createdAt?: string;
     updatedAt?: string;
@@ -63,6 +64,14 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
                 allowNull: false,
                 field: 'skills',
                 name: 'skills'
+            }
+        });
+
+        Anuncio.belongsTo(models.File, {
+            foreignKey: {
+                allowNull: true,
+                field: 'files',
+                name: 'files'
             }
         });
 

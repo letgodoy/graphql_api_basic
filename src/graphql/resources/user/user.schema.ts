@@ -21,7 +21,7 @@ const userTypes = `
         email: String!
         password: String!
         role: ROLE!
-        player: ID
+        player: PlayerInput
     }
 
     input UserUpdateInput {

@@ -6,7 +6,7 @@ const categoryTypes = `
         updatedAt: String
         name: String!
         description: String
-        image: String!
+        file: File
         user: User
         skillses: [Skills!]!
     }
@@ -14,7 +14,7 @@ const categoryTypes = `
     input CategoryInput {
         name: String!
         description: String
-        image: String!
+        file: File
     }
 
 `;

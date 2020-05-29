@@ -6,7 +6,7 @@ const anuncioTypes = `
         updatedAt: String
         active: Boolean
         description: String!
-        files: String
+        files: [File!]!
         player: Player
         price: String
         proposes: [Propose!]!

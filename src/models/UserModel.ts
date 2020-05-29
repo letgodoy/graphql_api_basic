@@ -5,7 +5,7 @@ import { BaseModelInterface } from '../interfaces/BaseModelInterface';
 import { ModelsInterface } from '../interfaces/ModelsInterface';
 
 export interface UserAttributes {
-    id?: number;
+    id?: string;
     email?: string;
     password?: string;
     role?: string;
@@ -26,9 +26,14 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
 
     const User: UserModel = 
         sequelize.define('User', {
+            // id: {
+            //     type: DataTypes.UUID,
+            //     defaultValue: DataTypes.UUIDV1,
+            //     allowNull: false,
+            //     primaryKey: true
+            // },
             id: {
-                type: DataTypes.UUID,
-                defaultValue: DataTypes.UUIDV1,
+                type: DataTypes.INTEGER.UNSIGNED.ZEROFILL,
                 allowNull: false,
                 primaryKey: true
             },

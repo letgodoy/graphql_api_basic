@@ -13,6 +13,7 @@ import { NotificationInstance } from '../models/NotificationModel';
 import { RankInstance } from '../models/RankModel';
 import { AnuncioInstance } from '../models/AnuncioModel';
 import { CategoryInstance } from '../models/CategoryModel';
+import { FileInstance } from '../models/FileModel';
 
 export interface DataLoaders {
 
@@ -28,5 +29,6 @@ export interface DataLoaders {
     rankLoader: DataLoader<DataLoaderParam<number>, RankInstance>;
     anuncioLoader: DataLoader<DataLoaderParam<number>, AnuncioInstance>;
     categoryLoader: DataLoader<DataLoaderParam<number>, CategoryInstance>;
+    fileLoader: DataLoader<DataLoaderParam<number>, FileInstance>;
 
 }

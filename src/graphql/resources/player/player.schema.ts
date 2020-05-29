@@ -25,7 +25,7 @@ const playerTypes = `
         user: User!
         anuncioses: [Anuncio!]!
         phoneverif: Boolean!
-        photo: String
+        photo: File
         ranksmaked: [Rank!]! @relation(name: "RankMakedOnPlayer")
 
     }

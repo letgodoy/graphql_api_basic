@@ -4,8 +4,8 @@ const postTypes = `
         id: ID!
         title: String!
         content: String!
-        file: String!
-        thumbnail: String!
+        file: File
+        thumbnail: File
         published: Boolean!
         categoria: String
         user: User!
@@ -16,8 +16,8 @@ const postTypes = `
     input PostInput {
         title: String!
         content: String!
-        file: String!
-        thumbnail: String!
+        file: File
+        thumbnail: File
         published: Boolean!
         categoria: String
     }

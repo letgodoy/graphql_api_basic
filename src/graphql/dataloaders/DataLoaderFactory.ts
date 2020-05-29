@@ -1,4 +1,4 @@
-import * as DataLoader from 'dataloader';
+import DataLoader from 'dataloader';
 
 import { DbConnection } from "../../interfaces/DbConnectionInterface";
 import { DataLoaders } from "../../interfaces/DataLoadersInterface";
@@ -17,7 +17,7 @@ import { CommentInstance } from '../../models/CommentsModel';
 import { NotificationInstance } from '../../models/NotificationModel';
 import { RankInstance } from '../../models/RankModel';
 import { AnuncioInstance } from '../../models/AnuncioModel';
-import { PlayerLoader } from './playerLoader';
+import { PlayerLoader } from './PlayerLoader';
 import { SkillsLoader } from './SkillsLoader';
 import { NotificationLoader } from './NotificationLoader';
 import { AnuncioLoader } from './AnuncioLoader';
@@ -28,6 +28,8 @@ import { ChatLoader } from './ChatLoader';
 import { ProposeLoader } from './ProposeLoader';
 import { CategoryInstance } from '../../models/CategoryModel';
 import { CategoryLoader } from './CategoryLoader';
+import { FileInstance } from '../../models/FileModel';
+import { FileLoader } from './FileLoader';
 
 export class DataLoaderFactory {
 
@@ -84,6 +86,10 @@ export class DataLoaderFactory {
             ),
             categoryLoader: new DataLoader<DataLoaderParam<number>, CategoryInstance>(
                 (params: DataLoaderParam<number>[]) => CategoryLoader.batchCategorys(this.db.Category, params, this.requestedFields),
+                { cacheKeyFn: (param: DataLoaderParam<number[]>) => param.key }
+            ),
+            fileLoader: new DataLoader<DataLoaderParam<number>, FileInstance>(
+                (params: DataLoaderParam<number>[]) => FileLoader.batchFiles(this.db.File, params, this.requestedFields),
                 { cacheKeyFn: (param: DataLoaderParam<number[]>) => param.key }
             )
 

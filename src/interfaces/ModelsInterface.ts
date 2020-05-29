@@ -12,6 +12,7 @@ import { RankModel } from './../models/RankModel';
 import { AnuncioModel } from './../models/AnuncioModel';
 import { ProposeModel } from './../models/ProposeModel';
 import { PlayerModel } from './../models/PlayerModel';
+import { FileModel } from '../models/FileModel';
 
 export interface ModelsInterface {
 
@@ -29,5 +30,6 @@ export interface ModelsInterface {
     Anuncio: AnuncioModel;
     Propose: ProposeModel;
     Player: PlayerModel;
+    File: FileModel;
 
 }

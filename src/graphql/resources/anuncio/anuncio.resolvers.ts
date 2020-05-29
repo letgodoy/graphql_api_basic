@@ -30,6 +30,12 @@ export const anuncioResolvers = {
             return skillsLoader
                 .load({key: anuncio.get('skills'), info})
                 .catch(handleError);
+        },
+
+        files: (anuncio, args, {db, dataloaders: {fileLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return fileLoader
+                .load({key: anuncio.get('files'), info})
+                .catch(handleError);
         }
 
     },

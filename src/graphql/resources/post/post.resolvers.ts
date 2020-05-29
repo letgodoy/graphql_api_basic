@@ -19,6 +19,18 @@ export const postResolvers = {
             return userLoader
                 .load({key: post.get('user'), info})
                 .catch(handleError);
+        },
+
+        file: (post, args, {db, dataloaders: {fileLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {  
+            return fileLoader
+                .load({key: post.get('file'), info})
+                .catch(handleError);
+        },
+
+        thumbnail: (post, args, {db, dataloaders: {fileLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {  
+            return fileLoader
+                .load({key: post.get('thumbnail'), info})
+                .catch(handleError);
         }
 
     },

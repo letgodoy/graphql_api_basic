@@ -80,6 +80,12 @@ export const playerResolvers = {
                 .catch(handleError);
         },
 
+        photo: (player, args, {db, dataloaders: {fileLoader}}: {db: DbConnection, dataloaders: DataLoaders}, info: GraphQLResolveInfo) => {
+            return fileLoader
+                .load({key: player.get('photo'), info})
+                .catch(handleError);
+        },
+
     },
 
     Query: {

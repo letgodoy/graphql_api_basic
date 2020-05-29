@@ -87,17 +87,17 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
         tableName: 'Players'
     });
 
-    // Player.associate = (models: ModelsInterface): void => {
+    Player.associate = (models: ModelsInterface): void => {
 
-    //     Player.belongsTo(models.User, {
-    //         foreignKey: {
-    //             allowNull: false,
-    //             field: 'user',
-    //             name: 'user'
-    //         }
-    //     });
+        Player.belongsTo(models.File, {
+            foreignKey: {
+                allowNull: true,
+                field: 'photo',
+                name: 'photo'
+            }
+        });
 
-    // };
+    };
 
     return Player;
 

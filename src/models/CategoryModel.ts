@@ -7,7 +7,8 @@ export interface CategoryAttributes {
     id?: string;
     description?: string;
     name?: string;
-    image?: string;
+
+    file?: string;
 
     user?: number;
     createdAt?: string;
@@ -36,11 +37,6 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
             type: DataTypes.STRING(128),
             allowNull: false
         },
-        image: {
-            type: DataTypes.STRING(128),
-            allowNull: true,
-            defaultValue: null
-        },
     }, {
         tableName: 'categories'
     });
@@ -52,6 +48,14 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
                 allowNull: false,
                 field: 'user',
                 name: 'user'
+            }
+        });
+
+        Category.belongsTo(models.File, {
+            foreignKey: {
+                allowNull: true,
+                field: 'file',
+                name: 'file'
             }
         });
 

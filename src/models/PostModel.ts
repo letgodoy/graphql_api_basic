@@ -7,10 +7,11 @@ export interface PostAttributes {
     id?: number;
     title?: string;
     content?: string;
-    file?: string;
-    thumbnail?: number;
     published?: boolean;
     categoria?: string;
+
+    file?: string;
+    thumbnail?: string;
 
     user?: string;
     createdAt?: string;
@@ -48,15 +49,6 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
             allowNull: true,
             defaultValue: null
         },
-        file: {
-            type: DataTypes.STRING,
-            allowNull: true,
-            defaultValue: null
-        },
-        thumbnail: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
 
         // photo: {
         //     type: DataTypes.BLOB({
@@ -74,6 +66,22 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
                 allowNull: false,
                 field: 'user',
                 name: 'user'
+            }
+        });
+
+        Post.belongsTo(models.File, {
+            foreignKey: {
+                allowNull: true,
+                field: 'file',
+                name: 'file'
+            }
+        });
+
+        Post.belongsTo(models.File, {
+            foreignKey: {
+                allowNull: true,
+                field: 'thumbnail',
+                name: 'thumbnail'
             }
         });
     };
