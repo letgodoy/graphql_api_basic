@@ -6,13 +6,13 @@ module.exports = {
     authUser: (parent, { email, password }, { db }) => {
       return db.User.findOne({
         where: { email: email },
-        attributes: ['id', 'password', 'player'],
+        attributes: ['id', 'password'],
       }).then((user) => {
         let errorMessage = 'Não autorizado, e-mail ou senha errados!'
         if (!user || !user.isPassword(user.get('password'), password)) {
           throw new Error(errorMessage)
         }
-        const payload = { sub: user.get('player') }
+        const payload = { sub: user.get('id') }
         return {
           token: jwt.sign(payload, JWT_SECRET),
         }

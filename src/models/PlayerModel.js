@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       document: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         unique: true,
       },
       email: {
@@ -64,14 +64,15 @@ module.exports = (sequelize, DataTypes) => {
     }
   )
   Player.associate = (models) => {
-    Player.hasOne(models.File, {
+    Player.belongsTo(models.File, {
       foreignKey: {
         allowNull: true,
         field: 'photo',
         name: 'photo',
       },
     }),
-      Player.belongsTo(models.User, {
+    
+      Player.hasOne(models.User, {
         foreignKey: {
           allowNull: true,
           field: 'user',

@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   )
   User.associate = (models) => {
-    User.hasOne(models.Player, {
+    User.belongsTo(models.Player, {
       foreignKey: {
         allowNull: true,
         field: 'player',

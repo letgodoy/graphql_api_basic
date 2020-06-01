@@ -100,17 +100,24 @@ module.exports = {
     },
   },
   Mutation: {
-    createPlayer: compose(
-      authResolvers,
-      (parent, { input }, { db, authUser }) => {
-        input.user = authUser.id
-        return db.sequelize
-          .transaction((t) => {
-            return db.Player.create(input, { transaction: t })
-          })
-          .catch(handleError)
-      }
-    ),
+    // createPlayer: compose(
+    //   authResolvers,
+    //   (parent, { input }, { db, authUser }) => {
+    //     input.user = authUser.id
+    //     return db.sequelize
+    //       .transaction((t) => {
+    //         return db.Player.create(input, { transaction: t })
+    //       })
+    //       .catch(handleError)
+    //   }
+    // ),
+    createPlayer: (parent, { input }, { db }) => {
+      return db.sequelize
+        .transaction((t) => {
+          return db.Player.create(input, { transaction: t })
+        })
+        .catch(handleError)
+    },
     updatePlayer: compose(
       authResolvers,
       (parent, { input }, { db, authUser }) => {

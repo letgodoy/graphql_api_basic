@@ -34,7 +34,7 @@ module.exports = {
     },
     user: (parent, { id }, context, info) => {
       id = parseInt(id)
-      return context.db.User.findById(id, {
+      return context.db.User.findByPk(id, {
         attributes: context.requestedFields.getFields(info, {
           keep: ['id'],
           exclude: ['user'],
@@ -47,7 +47,7 @@ module.exports = {
         .catch(handleError)
     },
     currentUser: compose(authResolvers, (parent, args, context, info) => {
-      return context.db.User.findById(context.authUser.id, {
+      return context.db.User.findByPk(context.authUser.id, {
         attributes: context.requestedFields.getFields(info, {
           keep: ['id'],
           exclude: ['user'],
@@ -67,7 +67,17 @@ module.exports = {
     createUser: (parent, { input }, { db }) => {
       return db.sequelize
         .transaction((t) => {
-          return db.User.create(input, { transaction: t })
+          return db.User.create(
+            input,
+            {
+              include: [
+                {
+                  association: db.User.Player,
+                },
+              ],
+            },
+            { transaction: t }
+          )
         })
         .catch(handleError)
     },
@@ -76,7 +86,7 @@ module.exports = {
       (parent, { input }, { db, authUser }) => {
         return db.sequelize
           .transaction((t) => {
-            return db.User.findById(authUser.id).then((user) => {
+            return db.User.findByPk(authUser.id).then((user) => {
               throwError(!user, `Usuário com id ${authUser.id} não encontrado!`)
               return user.update(input, { transaction: t })
             })
@@ -89,7 +99,7 @@ module.exports = {
       (parent, { input }, { db, authUser }) => {
         return db.sequelize
           .transaction((t) => {
-            return db.User.findById(authUser.id).then((user) => {
+            return db.User.findByPk(authUser.id).then((user) => {
               throwError(!user, `Usuário com id ${authUser.id} não encontrado!`)
               return user
                 .update(input, { transaction: t })
@@ -102,7 +112,7 @@ module.exports = {
     recoverUserPassword: (parent, { id, input }, { db }) => {
       return db.sequelize
         .transaction((t) => {
-          return db.User.findById(id).then((user) => {
+          return db.User.findByPk(id).then((user) => {
             throwError(!user, `Usuário com id ${id} não encontrado!`)
             return user.update(input, { transaction: t }).then((user) => !!user)
           })
@@ -112,7 +122,7 @@ module.exports = {
     deleteUser: compose(authResolvers, (parent, args, { db, authUser }) => {
       return db.sequelize
         .transaction((t) => {
-          return db.User.findById(authUser.id).then((user) => {
+          return db.User.findByPk(authUser.id).then((user) => {
             throwError(!user, `Usuário com id ${authUser.id} não encontrado!`)
             return user.destroy({ transaction: t }).then((user) => !!user)
           })

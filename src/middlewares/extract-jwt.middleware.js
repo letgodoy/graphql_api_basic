@@ -20,12 +20,13 @@ module.exports = {
           return next()
         }
         db.User.findById(decoded.sub, {
-          attributes: ['id', 'player'],
+          // attributes: ['id', 'player'],
+          attributes: ['id'],
         }).then((user) => {
           if (user) {
             req['context']['authUser'] = {
               id: user.get('id'),
-              playerId: user.get('player'),
+              // playerId: user.get('player'),
             }
           }
           return next()
