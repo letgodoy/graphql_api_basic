@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       tableName: 'Files',
+      timestamps: true,
     }
   )
   // File.associate = (models: ModelsInterface): void => {

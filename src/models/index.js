@@ -44,7 +44,9 @@ if (db == null) {
     }
   })
 
-  db['sequelize'] = sequelize
+  // db['sequelize'] = sequelize
+  db.sequelize = sequelize
+  db.Sequelize = Sequelize
 }
 
 module.exports = { db }

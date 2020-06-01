@@ -48,6 +48,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       tableName: 'addresses',
+      timestamps: true,
     }
   )
   Address.associate = (models) => {

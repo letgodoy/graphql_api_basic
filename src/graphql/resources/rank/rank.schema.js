@@ -38,8 +38,8 @@ const rankTypes = `
         transparenciaC: Int
         typeTo: TYPE!
 
-        propose: ID!
-        player: ID!
+        propose: ProposeInput!
+        player: PlayerInput!
     }
 
 `

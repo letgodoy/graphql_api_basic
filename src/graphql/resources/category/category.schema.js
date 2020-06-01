@@ -14,7 +14,7 @@ const categoryTypes = `
     input CategoryInput {
         name: String!
         description: String
-        file: File
+        file: FileInput
     }
 
 `

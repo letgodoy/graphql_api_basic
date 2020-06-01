@@ -93,6 +93,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       tableName: 'Proposes',
+      timestamps: true,
     }
   )
   Propose.associate = (models) => {

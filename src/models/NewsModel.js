@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       tableName: 'Newses',
+      timestamps: true,
     }
   )
   News.associate = (models) => {

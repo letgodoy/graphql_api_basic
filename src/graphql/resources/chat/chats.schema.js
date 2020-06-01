@@ -16,8 +16,8 @@ const chatTypes = `
         description: String!
         status: Boolean!
         date: String!
-        to: ID!
-        propose: ID!
+        to: PlayerInput!
+        propose: ProposeInput!
     }
 
 `

@@ -45,7 +45,7 @@ const playerTypes = `
         status: Boolean!
         type: TYPE!
         phoneverif: Boolean!
-        photo: File
+        photo: FileInput
     }
 
 `
@@ -53,6 +53,7 @@ const playerTypes = `
 const playerQueries = `
     allPlayers(first: Int, offset: Int): [ Player! ]!
     player(id: ID!): Player
+    hello(string: String): String
 `
 
 const playerMutations = `

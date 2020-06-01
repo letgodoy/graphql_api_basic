@@ -87,6 +87,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       tableName: 'Ranks',
+      timestamps: true,
     }
   )
   Rank.associate = (models) => {

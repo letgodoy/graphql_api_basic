@@ -3,14 +3,9 @@ module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     'User',
     {
-      // id: {
-      //     type: DataTypes.UUID,
-      //     defaultValue: DataTypes.UUIDV1,
-      //     allowNull: false,
-      //     primaryKey: true
-      // },
       id: {
-        type: DataTypes.INTEGER.UNSIGNED.ZEROFILL,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV1,
         allowNull: false,
         primaryKey: true,
       },
@@ -35,12 +30,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       tableName: 'users',
+      timestamps: true,
       hooks: {
-        beforeCreate: (user, options) => {
+        beforeCreate: (user) => {
           const salt = bcryptjs.genSaltSync()
           user.password = bcryptjs.hashSync(user.password, salt)
         },
-        beforeUpdate: (user, options) => {
+        beforeUpdate: (user) => {
           if (user.changed('password')) {
             const salt = bcryptjs.genSaltSync()
             user.password = bcryptjs.hashSync(user.password, salt)
@@ -50,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   )
   User.associate = (models) => {
-    User.belongsTo(models.Player, {
+    User.hasOne(models.Player, {
       foreignKey: {
         allowNull: true,
         field: 'player',

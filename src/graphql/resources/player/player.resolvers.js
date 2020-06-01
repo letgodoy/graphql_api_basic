@@ -95,6 +95,9 @@ module.exports = {
         })
         .catch(handleError)
     },
+    hello: (parent, { string }) => {
+      return string
+    },
   },
   Mutation: {
     createPlayer: compose(

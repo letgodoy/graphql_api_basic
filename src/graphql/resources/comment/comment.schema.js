@@ -25,8 +25,8 @@ const commentTypes = `
         reply: String
         typeTo: TYPE!
         rating: RATING!
-        to: Player
-        propose: Propose
+        to: PlayerInput
+        propose: ProposeInput
     }
 
 `

@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       tableName: 'chats',
+      timestamps: true,
     }
   )
   Chat.associate = (models) => {

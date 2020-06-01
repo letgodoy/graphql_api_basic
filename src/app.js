@@ -15,11 +15,13 @@ class App {
     this.express = express()
     this.init()
   }
+
   init() {
     this.requestedFields = new RequestedFields()
     this.dataLoaderFactory = new DataLoaderFactory(db, this.requestedFields)
     this.middleware()
   }
+
   middleware() {
     this.express.use(
       cors({
@@ -45,6 +47,7 @@ class App {
         req['context']['requestedFields'] = this.requestedFields
         next()
       },
+
       graphqlHTTP((req) => ({
         schema: schema,
         // eslint-disable-next-line no-undef
@@ -55,5 +58,4 @@ class App {
   }
 }
 
-const server = new App().express
-module.exports = { server }
+module.exports = new App().express

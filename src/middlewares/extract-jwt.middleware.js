@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const db = require('./../models')
+const { db } = require('./../models')
 const { JWT_SECRET } = require('../utils/utils')
 
 module.exports = {

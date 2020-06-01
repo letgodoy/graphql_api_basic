@@ -16,8 +16,8 @@ const postTypes = `
     input PostInput {
         title: String!
         content: String!
-        file: File
-        thumbnail: File
+        file: FileInput
+        thumbnail: FileInput
         published: Boolean!
         categoria: String
     }

@@ -48,8 +48,8 @@ const proposeTypes = `
         location: String
         locationF: String
 
-        to: ID!
-        anuncio: ID!
+        to: PlayerInput!
+        anuncio: AnuncioInput!
     }
 
 `

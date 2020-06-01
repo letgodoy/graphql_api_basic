@@ -1,10 +1,10 @@
 const http = require('http')
 
-const app = require('./app')
+const App = require('./app')
 const { db } = require('./models')
 const { normalizePort, onError, onListening } = require('./utils/utils')
 
-const server = http.createServer(app)
+const server = http.createServer(App)
 // eslint-disable-next-line no-undef
 const port = normalizePort(process.env.port || 3000)
 // eslint-disable-next-line no-undef
