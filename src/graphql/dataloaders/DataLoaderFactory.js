@@ -111,14 +111,14 @@ class DataLoaderFactory {
 module.exports = DataLoaderFactory
 
 class AddressLoader {
-  static batchAddresss(Address, params, requestedFields) {
+  batchAddresss(Address, params, requestedFields) {
     let ids = params.map((param) => param.key)
     return Promise.resolve(
       Address.findAll({
-        where: { id: { $in: ids } },
+        where: { user: { $in: ids } },
         attributes: requestedFields.getFields(params[0].info, {
           keep: ['id'],
-          exclude: ['player'],
+          exclude: ['user'],
         }),
       })
     )
@@ -309,14 +309,14 @@ class SkillsLoader {
 }
 
 class UserLoader {
-  static batchUsers(User, params, requestedFields) {
+  batchUsers(User, params, requestedFields) {
     let ids = params.map((param) => param.key)
+    console.log(params)
     return Promise.resolve(
       User.findAll({
         where: { id: { $in: ids } },
         attributes: requestedFields.getFields(params[0].info, {
           keep: ['id'],
-          exclude: ['player'],
         }),
       })
     )

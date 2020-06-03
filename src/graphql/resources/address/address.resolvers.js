@@ -4,9 +4,9 @@ const { authResolvers } = require('../../composable/auth.resolver')
 
 module.exports = {
   Address: {
-    player: (address, args, { dataloaders: { playerLoader } }, info) => {
-      return playerLoader
-        .load({ key: address.get('player'), info })
+    user: (address, args, { dataloaders: { userLoader } }, info) => {
+      return userLoader
+        .load({ key: address.get('user'), info })
         .catch(handleError)
     },
   },
@@ -18,7 +18,7 @@ module.exports = {
         offset: offset,
         attributes: context.requestedFields.getFields(info, {
           keep: ['id'],
-          exclude: ['player'],
+          exclude: ['user'],
         }),
       }).catch(handleError)
     },
@@ -27,7 +27,7 @@ module.exports = {
       return context.db.Address.findById(id, {
         attributes: context.requestedFields.getFields(info, {
           keep: ['id'],
-          exclude: ['player'],
+          exclude: ['user'],
         }),
       })
         .then((address) => {
@@ -39,19 +39,19 @@ module.exports = {
   },
 
   Mutation: {
-    createAddress: compose(
-      authResolvers,
+    createAddress: compose(...authResolvers)(
       (parent, { input }, { db, authUser }) => {
-        input.player = authUser.player
+        input.user = authUser.id
+        console.log(authUser)
         return db.sequelize
           .transaction((t) => {
+            input.player = authUser.id
             return db.Address.create(input, { transaction: t })
           })
           .catch(handleError)
       }
     ),
-    updateAddress: compose(
-      authResolvers,
+    updateAddress: compose(...authResolvers)(
       (parent, { id, input }, { db, authUser }) => {
         id = parseInt(id)
         return db.sequelize

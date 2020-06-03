@@ -1,6 +1,5 @@
 const userTypes = `
 
-    # User definition type
     type User {
         id: ID!
         name: String!
@@ -8,8 +7,31 @@ const userTypes = `
         role: ROLE!
         createdAt: String!
         updatedAt: String!
-        player: Player
+        birthday: String
+        chatsFrom: [Chat!]!
+        chatsTo: [Chat!]!
+        commentsTo: [Comment!]!
+        commentsfrom: [Comment!]!
+        description: String
+        document: String
+        notifications: [Notification!]!
+        phone: String!
+        proposes: [Propose!]!
+        proposesFrom: [Propose!]!
+        ranks: [Rank!]!
+        status: Boolean!
+        type: TYPE!
+        anuncioses: [Anuncio!]!
+        phoneverif: Boolean!
+        photo: File
+        ranksmaked: [Rank!]!
+        address: Address
     }
+
+    enum TYPE {
+        CLIENTE
+        PROFISSIONAL
+      }
 
     enum ROLE {
         USER
@@ -21,12 +43,30 @@ const userTypes = `
         email: String!
         password: String!
         role: ROLE!
-        player: PlayerInput
+        birthday: String
+        description: String
+        document: String
+        name: String!
+        phone: String!
+        status: Boolean!
+        type: TYPE!
+        phoneverif: Boolean!
+        photo: FileInput
+        address: AddressInput
     }
 
     input UserUpdateInput {
         email: String!
         role: ROLE!
+        birthday: String
+        description: String
+        document: String
+        name: String!
+        phone: String!
+        status: Boolean!
+        type: TYPE!
+        phoneverif: Boolean!
+        photo: FileInput
     }
 
     input UserUpdatePasswordInput {
@@ -36,7 +76,7 @@ const userTypes = `
 `
 
 const userQueries = `
-    users(first: Int, offset: Int): [ User! ]!
+    allUsers(first: Int, offset: Int): [ User! ]!
     user(id: ID!): User
     currentUser: User
 `

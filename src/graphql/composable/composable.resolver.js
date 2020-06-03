@@ -22,7 +22,7 @@
 //   }
 // }
 
-const compose = (...functions) => (args) =>
-  functions.reduceRight((arg, fn) => fn(arg), args)
-
+const compose = (...functions) => (args) => {
+  return functions.reduceRight((arg, fn) => fn(arg), args)
+}
 module.exports = compose

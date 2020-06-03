@@ -8,7 +8,7 @@ const { db } = require('./models')
 const schema = require('./graphql/schema')
 const { extractJwtMiddleware } = require('./middlewares/extract-jwt.middleware')
 const DataLoaderFactory = require('./graphql/dataloaders/DataLoaderFactory')
-const { RequestedFields } = require('./graphql/ast/RequestedFields')
+const RequestedFields = require('./graphql/ast/RequestedFields')
 
 class App {
   constructor() {

@@ -22,7 +22,7 @@ const playerTypes = `
         ranks: [Rank!]!
         status: Boolean!
         type: TYPE!
-        user: User!
+        user: User
         anuncioses: [Anuncio!]!
         phoneverif: Boolean!
         photo: File
@@ -30,10 +30,6 @@ const playerTypes = `
 
     }
 
-    enum TYPE {
-        CLIENTE
-        PROFISSIONAL
-      }
 
     input PlayerInput {
         birthday: String

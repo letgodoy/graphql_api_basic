@@ -9,7 +9,7 @@ const addressTypes = `
         country: String
         neighborhood: String
         number: String
-        player: Player
+        user: User
         state: String
         street: String
         zipcode: String!

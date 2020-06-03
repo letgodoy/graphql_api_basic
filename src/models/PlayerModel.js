@@ -57,12 +57,21 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: false,
       },
+      // userId: {
+      //   type: DataTypes.UUID,
+      //   allowNull: true,
+      //   references: {
+      //     model: 'users', // name of Target model
+      //     key: 'id', // key in Target model that we're referencing
+      //   },
+      // },
     },
     {
       tableName: 'Players',
       timestamps: true,
     }
   )
+
   Player.associate = (models) => {
     Player.belongsTo(models.File, {
       foreignKey: {
@@ -70,15 +79,14 @@ module.exports = (sequelize, DataTypes) => {
         field: 'photo',
         name: 'photo',
       },
-    }),
-    
-      Player.hasOne(models.User, {
-        foreignKey: {
-          allowNull: true,
-          field: 'user',
-          name: 'user',
-        },
-      })
+    })
+      // Player.belongsTo(models.User, {
+      //   foreignKey: {
+      //     allowNull: true,
+      //     field: 'user',
+      //     name: 'userId',
+      //   },
+      // })
   }
   return Player
 }

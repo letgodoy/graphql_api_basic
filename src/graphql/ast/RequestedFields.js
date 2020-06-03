@@ -15,6 +15,4 @@ class RequestedFields {
   }
 }
 // exports.RequestedFields = RequestedFields
-module.exports = {
-  RequestedFields,
-}
+module.exports = RequestedFields

@@ -52,13 +52,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   )
   Address.associate = (models) => {
-    Address.belongsTo(models.Player, {
+    Address.belongsTo(models.User, {
       foreignKey: {
         allowNull: false,
-        field: 'player',
-        name: 'player',
+        field: 'user',
+        name: 'user',
       },
     })
   }
+
   return Address
 }
