@@ -1,6 +1,6 @@
-const DataLoader = require('dataloader')
+import DataLoader from 'dataloader'
 
-class DataLoaderFactory {
+export default class DataLoaderFactory {
   constructor(db, requestedFields) {
     this.db = db
     this.requestedFields = requestedFields
@@ -107,8 +107,6 @@ class DataLoaderFactory {
     }
   }
 }
-
-module.exports = DataLoaderFactory
 
 class AddressLoader {
   batchAddresss(Address, params, requestedFields) {

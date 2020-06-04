@@ -1,17 +1,59 @@
-const http = require('http')
+import dotenv from 'dotenv';
+import express from 'express';
+import { ApolloServer } from 'apollo-server-express';
+import compression from 'compression'
+import helmet from 'helmet'
+import mongoose from 'mongoose';
 
-const App = require('./app')
-const { db } = require('./models')
-const { normalizePort, onError, onListening } = require('./utils/utils')
+import './utils/db';
+import schema from './schema/index';
+import { extractJwtMiddleware } from './middlewares/extract-jwt.middleware'
+import { db } from './models'
+import { normalizePort, onError } from './utils/utils'
 
-const server = http.createServer(App)
+const port = normalizePort(process.env.PORT || 3000)
 // eslint-disable-next-line no-undef
-const port = normalizePort(process.env.port || 3000)
-// eslint-disable-next-line no-undef
-const host = process.env.host || '127.0.0.1'
+const host = process.env.HOST || '127.0.0.1'
 
-db.sequelize.sync().then(() => {
-  server.listen(port, host)
-  server.on('error', onError(server))
-  server.on('listening', onListening(server))
-})
+dotenv.config();
+
+const app = express();
+
+app.use(compression())
+app.use(helmet())
+app.use(extractJwtMiddleware())
+
+const server = new ApolloServer({
+  schema,
+  cors: true,
+  playground: process.env.NODE_ENV === 'development',
+  introspection: true,
+  tracing: true,
+  path: '/graphql',
+  context: {
+    db,
+  },
+});
+
+server.applyMiddleware({
+  app,
+  path: '/graphql',
+  cors: true,
+
+  onHealthCheck: () =>
+    // eslint-disable-next-line no-undef
+    new Promise((resolve, reject) => {
+      if (mongoose.connection.readyState > 0) {
+        resolve();
+      } else {
+        reject();
+      }
+    }),
+
+});
+
+app.listen({ port, host }, () => {
+  app.on('error', onError(app));
+  console.log(`🚀 Server listening on port ${port}`);
+  console.log(`😷 Health checks available at ${host}`);
+});
