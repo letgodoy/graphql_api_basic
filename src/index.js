@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import express from 'express';
+import express, { request } from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import compression from 'compression'
 import helmet from 'helmet'
@@ -32,6 +32,7 @@ const server = new ApolloServer({
   path: '/graphql',
   context: {
     db,
+    req: request,
   },
 });
 

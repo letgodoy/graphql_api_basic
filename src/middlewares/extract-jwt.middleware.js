@@ -2,8 +2,7 @@ const jwt = require('jsonwebtoken')
 const { db } = require('./../models')
 const { JWT_SECRET } = require('../utils/utils')
 
-module.exports = {
-  extractJwtMiddleware() {
+export function extractJwtMiddleware() {
     return (req, res, next) => {
       let authorization = req.get('Authorization')
       let token = authorization ? authorization.split(' ')[1] : undefined
@@ -19,19 +18,27 @@ module.exports = {
         if (err) {
           return next()
         }
-        db.User.findById(decoded.sub, {
-          // attributes: ['id', 'player'],
-          attributes: ['id'],
-        }).then((user) => {
+        
+        db.User.findById(decoded.sub).then((user) => {
           if (user) {
             req['context']['authUser'] = {
-              id: user.get('id'),
-              // playerId: user.get('player'),
+              id: user._id,
             }
           }
           return next()
         })
       })
     }
-  },
+  }
+
+export function authUser(resolvers) {
+  Object.keys(resolvers).forEach(k => {
+    resolvers[k] = resolvers[k].wrapResolve(next => rp => {
+      if (!rp.context.authUser) {
+        throw new Error('Voce nao tem autorizacao para fazer isso.');
+      }
+      return next(rp);
+    });
+  });
+  return resolvers;
 }
