@@ -7,14 +7,19 @@ const schemaComposer = new SchemaComposer();
 
 import { UserQuery, UserMutation } from './user';
 import { userSingin } from './token'
+import { AddressQuery, AddressMutation } from './address';
+
 
 schemaComposer.Query.addFields({
     ...UserQuery,
+    ...userSingin,
+    ...AddressQuery
 });
 
 schemaComposer.Mutation.addFields({
     ...UserMutation,
-    ...userSingin
+    ...userSingin,
+    ...AddressMutation
 });
 
 export default schemaComposer.buildSchema();

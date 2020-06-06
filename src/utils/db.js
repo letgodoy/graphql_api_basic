@@ -20,7 +20,9 @@ mongoose.set('useCreateIndex', true);
 connection
     .then(db => db)
     .catch(err => {
-        console.log(err);
+        // eslint-disable-next-line no-constant-condition
+        process.env.NODE_ENV = 'development' ? console.log(err) : null;
+        throw new Error("Erro ao conectao com o banco")
     });
 
 export default connection;

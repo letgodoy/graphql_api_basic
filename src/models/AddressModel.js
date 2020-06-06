@@ -1,65 +1,49 @@
-module.exports = (sequelize, DataTypes) => {
-  const Address = sequelize.define(
-    'Address',
-    {
-      id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV1,
-        primaryKey: true,
-        allowNull: false,
-      },
+import mongoose, { Schema } from 'mongoose';
+import timestamps from 'mongoose-timestamp';
+import { composeWithMongoose } from 'graphql-compose-mongoose';
+
+export const AddressSchema = new Schema(
+  {
       city: {
-        type: DataTypes.STRING(128),
-        allowNull: false,
+        type: String,
+        required: true,
       },
       complement: {
-        type: DataTypes.STRING(128),
-        allowNull: true,
-        defaultValue: null,
+        type: String,
       },
       country: {
-        type: DataTypes.STRING(128),
-        allowNull: false,
-        defaultValue: 'Brasil',
+        type: String,
+        default: 'Brasil',
       },
       neighborhood: {
-        type: DataTypes.STRING(128),
-        allowNull: true,
-        defaultValue: null,
+        type: String,
       },
       number: {
-        type: DataTypes.STRING(128),
-        allowNull: true,
-        defaultValue: null,
+        type: String,
       },
       state: {
-        type: DataTypes.STRING(128),
-        allowNull: false,
+        type: String,
+        required: true,
       },
       street: {
-        type: DataTypes.STRING(128),
-        allowNull: true,
-        defaultValue: null,
+        type: String,
       },
       zipcode: {
-        type: DataTypes.STRING(128),
-        allowNull: false,
+        type: String,
+        required: true,
+      },
+      userId: {
+        type: mongoose.ObjectId,
+        ref: "User",
       },
     },
-    {
-      tableName: 'addresses',
-      timestamps: true,
-    }
-  )
-  Address.associate = (models) => {
-    Address.belongsTo(models.User, {
-      foreignKey: {
-        allowNull: false,
-        field: 'user',
-        name: 'user',
-      },
-    })
-  }
+  {
+    colection: 'addresses',
+  });
 
-  return Address
-}
+AddressSchema.plugin(timestamps);
+
+AddressSchema.index({ createdAt: 1, updatedAt: 1 });
+
+export const Address = mongoose.model('Address', AddressSchema);
+export const AddressTC = composeWithMongoose(Address);

@@ -1,37 +1,63 @@
 const jwt = require('jsonwebtoken')
-const { JWT_SECRET } = require('../utils/utils')
+const { JWT_SECRET, handleError } = require('../utils/utils')
 import { schemaComposer } from 'graphql-compose';
+import '../utils/db';
+import { User } from '../models/UserModel';
+import bcryptjs from 'bcryptjs';
 
+export const TokenType = `
+type Token {
+  token: String!
+}`
 
-export const userSingin = schemaComposer.createResolver({
-    name: 'singIn',
-    args: { email: 'String', password: 'String' },
-    resolve: async ({ source, args, context }) => {
-    //   const res = await fetch(`/endpoint/${args.id}`); // or some fetch from any database
-    //   const data = await res.json();
+// const TokenTC = schemaComposer.createObjectTC(TokenType)
 
-      const errorMessage = 'Não autorizado, e-mail ou senha errados!'
-      if (context.authUser) throw new Error(errorMessage)
-      
+export const userSinginResolver = schemaComposer.createResolver({
+  name: 'userSingin',
+  type: TokenType,
+  args: { email: 'String', password: 'String' },
+  kind: 'mutation',
+  resolve: async ({args, context}) => {
+    const errorMessage = 'Não autorizado, e-mail ou senha errados!'
+    if (context.authUser) throw new Error("Você já está autenticado.")
+    return new Promise( async (resolve, reject) => {
       try {
-        const user = await User.findOne({ email: args.email }).exec();
+        const user = await User.findOne({ email: args.email })
 
-        if (!user) {
-          user.comparePassword(args.password, (error, match) => {
-            if (!match) throw new Error(errorMessage)
-            if (error) throw new Error(errorMessage)
-            const payload = { sub: user._id }
-            return {
-              token: jwt.sign(payload, JWT_SECRET),
+        // eslint-disable-next-line no-undef
+
+        if (user) {
+          bcryptjs.compare(args.password, user.password, (error, match) => {
+
+            if (process.env.NODE_ENV === 'development') console.log('match password', match)
+
+            if (error) handleError(error, errorMessage)
+
+            if (match) {
+              const payload = { sub: user._id }
+              const token = jwt.sign(payload, JWT_SECRET)
+              const res = {token}
+              // return res
+              resolve(res)
+            } else {
+              handleError(error, errorMessage)
             }
-          });
+          })
+
         } else {
+          console.log('acho ninguem')
           throw new Error(errorMessage)
         }
       } catch {
         error => {
-          throw new Error(errorMessage)
+          handleError(error, errorMessage)
         }
       }
-    },
-  });
+    })
+  },
+  projection: { token: true },
+})
+
+export const userSingin = {
+  userSingin: userSinginResolver
+}

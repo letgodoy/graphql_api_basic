@@ -7,7 +7,6 @@ const UserQuery = {
         if (rp.projection.password) delete rp.projection.password
         return next(rp);
       }),
-    // userByIds: UserTC.getResolver('findByIds'),
     userOne: UserTC.getResolver('findOne').wrapResolve(next => rp => {
         if (rp.projection.password) delete rp.projection.password
         return next(rp);
@@ -23,6 +22,11 @@ const UserQuery = {
 
 const UserMutation = {
     userCreateOne: UserTC.getResolver('createOne'),
+    recoverPassword: UserTC.getResolver('updateOne').wrapResolve(next => rp => {
+      if (rp.projection.record.password) delete rp.projection.record.password
+      console.log(rp.projection)
+      return next(rp);
+    }),
     // userCreateMany: UserTC.getResolver('createMany'),
     ...authUser({
     userUpdateById: UserTC.getResolver('updateById').wrapResolve(next => rp => {
@@ -34,22 +38,14 @@ const UserMutation = {
     userUpdateOne: UserTC.getResolver('updateOne').wrapResolve(next => rp => {
         if (rp.args.record.password) throw new Error("Não é permitido alterar a senha")
         if (rp.projection.record.password) delete rp.projection.record.password
+        console.log(rp.projection)
         rp.args.record._id = rp.context.authUser.id
         return next(rp);
       }),
-    // userUpdateMany: UserTC.getResolver('updateMany').wrapResolve(next => rp => {
-    //     if (rp.args.record.password) throw new Error("Não é permitido alterar a senha")
-    //     if (rp.projection.record.password) delete rp.projection.record.password
-    //     rp.args.record.user = rp.context.authUser
-    //     return next(rp);
-    //   }),
     userUpdateByIdPassword: UserTC.getResolver('updateById').wrapResolve(next => rp => {
       rp.args.record._id = rp.context.authUser.id
       return next(rp);
     }),
-    // userRemoveById: UserTC.getResolver('removeById'),
-    // userRemoveOne: UserTC.getResolver('removeOne'),
-    // userRemoveMany: UserTC.getResolver('removeMany'),
   })
 };
 

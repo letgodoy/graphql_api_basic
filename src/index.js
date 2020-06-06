@@ -7,7 +7,7 @@ import mongoose from 'mongoose';
 
 import './utils/db';
 import schema from './schema/index';
-import { extractJwtMiddleware } from './middlewares/extract-jwt.middleware'
+import { extractJwtMiddleware, extractJwt } from './middlewares/extract-jwt.middleware'
 import { db } from './models'
 import { normalizePort, onError } from './utils/utils'
 
@@ -21,7 +21,6 @@ const app = express();
 
 app.use(compression())
 app.use(helmet())
-app.use(extractJwtMiddleware())
 
 const server = new ApolloServer({
   schema,
@@ -30,16 +29,16 @@ const server = new ApolloServer({
   introspection: true,
   tracing: true,
   path: '/graphql',
-  context: {
-    db,
-    req: request,
-  },
+  context: ({req}) => {
+    return extractJwt(req)
+  }
 });
 
 server.applyMiddleware({
   app,
   path: '/graphql',
   cors: true,
+
 
   onHealthCheck: () =>
     // eslint-disable-next-line no-undef
@@ -52,6 +51,8 @@ server.applyMiddleware({
     }),
 
 });
+
+
 
 app.listen({ port, host }, () => {
   app.on('error', onError(app));

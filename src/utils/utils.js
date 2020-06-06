@@ -34,15 +34,18 @@ const onListening = (server) => {
     console.log(`Listening at ${bind}... as ${process.env.NODE_ENV}`)
   }
 }
-const handleError = (error) => {
-  let errorMessage = `${error.name}: ${error.message}`
+const handleError = (error, message) => {
+  // let errorMessage = `${error.name}: ${error.message}`
   // eslint-disable-next-line no-undef
   let env = process.env.NODE_ENV
-  if (env !== 'test' && env !== 'pipelines') {
-    console.log(errorMessage)
+  // if (env !== 'test' && env !== 'pipelines') {
+  if (env === 'development') {
+    console.log(error)
   }
-  return Promise.reject(new Error(errorMessage))
+  // eslint-disable-next-line no-undef
+  return Promise.reject(new Error(message))
 }
+
 const throwError = (condition, message) => {
   if (condition) {
     throw new Error(message)

@@ -1,9 +1,12 @@
 import { User, UserTC } from './UserModel';
+import { Address, AddressTC } from './AddressModel';
 
 export const db = {
-  UserTC
+  UserTC,
+  AddressTC
 };
 
 export const models = {
-  User
+  User,
+  Address
 };

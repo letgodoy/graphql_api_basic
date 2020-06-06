@@ -53,10 +53,10 @@ export const UserSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    address: {
-      type: mongoose.ObjectId,
-      ref: "Address",
-    },
+    // address: {
+    //   type: mongoose.ObjectId,
+    //   ref: "Address",
+    // },
     photo: {
       type: mongoose.ObjectId,
       ref: "File",
@@ -118,10 +118,6 @@ UserSchema.pre('save', function (next) {
   user.password = bcryptjs.hashSync(this.password, 10);
   next();
 });
-
-UserSchema.methods.comparePassword = function (encodedPassword, password, callback) {
-  return callback(null, bcryptjs.compareSync(encodedPassword, password));
-};
 
 export const User = mongoose.model('User', UserSchema);
 export const UserTC = composeWithMongoose(User);
