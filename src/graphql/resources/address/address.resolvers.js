@@ -10,7 +10,7 @@ export default {
   },
 
   Query: {
-    allAddresses: async (parent, args, context) => await context.models.Address.find().catch(handleError),
+    allAddresses: async (parent, args, context) => await context.models.Address.find(args.filter).catch(handleError),
     
     address: async (parent, args, context) => await context.models.Address.findById(args.id)
     .then(address => !address ? handleError(address, "Usuário não encontrado!") : address)

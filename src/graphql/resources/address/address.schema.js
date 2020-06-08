@@ -29,7 +29,7 @@ export const addressTypes = `
 `
 
 export const addressQueries = `
-    allAddresses(first: Int, offset: Int): [ Address! ]!
+    allAddresses(filter: Address): [ Address! ]!
     address(id: ID!): Address
 `
 

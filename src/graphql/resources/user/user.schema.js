@@ -54,7 +54,7 @@ export const userTypes = `
 `
 
 export const userQueries = `
-    allUsers(first: Int, offset: Int): [ User! ]!
+    allUsers(filter: User): [ User! ]!
     user(id: ID!): User
     currentUser: User
 `

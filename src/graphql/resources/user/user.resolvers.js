@@ -13,7 +13,7 @@ export default {
   },
 
   Query: {
-    allUsers: async (parent, args, context) => await context.models.User.find(),
+    allUsers: async (parent, args, context) => await context.models.User.find(args.filter).catch(handleError),
 
     user: async (parent, args, context) => await context.models.User.findById(args.id)
       .then(user => !user ? handleError(user, "Usuário não encontrado!") : user)
