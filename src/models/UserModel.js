@@ -1,6 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
 import timestamps from 'mongoose-timestamp';
-import { composeWithMongoose } from 'graphql-compose-mongoose';
 import bcryptjs from 'bcryptjs';
 
 export const UserSchema = new Schema(
@@ -53,54 +52,6 @@ export const UserSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    // address: {
-    //   type: mongoose.ObjectId,
-    //   ref: "Address",
-    // },
-    photo: {
-      type: mongoose.ObjectId,
-      ref: "File",
-    },
-    chatsFrom: {
-      type: [mongoose.ObjectId],
-      ref: "Chat",
-    },
-    chatsTo: {
-      type: [mongoose.ObjectId],
-      ref: "Chat",
-    },
-    commentsTo: {
-      type: [mongoose.ObjectId],
-      ref: "Comment",
-    },
-    commentsfrom: {
-      type: [mongoose.ObjectId],
-      ref: "Comment",
-    },
-    notifications: {
-      type: [mongoose.ObjectId],
-      ref: "Notification",
-    },
-    proposes: {
-      type: [mongoose.ObjectId],
-      ref: "Propose",
-    },
-    proposesFrom: {
-      type: [mongoose.ObjectId],
-      ref: "Propose",
-    },
-    ranks: {
-      type: [mongoose.ObjectId],
-      ref: "Rank",
-    },
-    ranksmaked: {
-      type: [mongoose.ObjectId],
-      ref: "Rank",
-    },
-    anuncioses: {
-      type: [mongoose.ObjectId],
-      ref: "Anuncio",
-    },
   },
   {
     colection: 'users',
@@ -119,5 +70,13 @@ UserSchema.pre('save', function (next) {
   next();
 });
 
-export const User = mongoose.model('User', UserSchema);
-export const UserTC = composeWithMongoose(User);
+UserSchema.pre('findOneAndUpdate', function (next) {
+  const user = this;
+  if (!user._update.$set.password) {
+    return next();
+  }
+  user._update.$set.password = bcryptjs.hashSync(this._update.$set.password, 10);
+  next();
+});
+
+export default mongoose.model('User', UserSchema);

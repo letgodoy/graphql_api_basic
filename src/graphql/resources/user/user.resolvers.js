@@ -1,170 +1,55 @@
-const { handleError, throwError } = require('../../../utils/utils')
-const compose = require('../../composable/composable.resolver')
-const { authResolvers } = require('../../composable/auth.resolver')
+import { handleError } from '../../../utils/utils'
+import compose from '../../composable/composable.resolver'
+import { authUser } from '../../../utils/extract-jwt'
 
-module.exports = {
+//compose(authUser)(function) serve para funcoes que precisao de autorizacao.
+//context.authUser.role usa para regras de tipos de usuario. ex. User, Admin
+
+export default {
   User: {
-    // address: (user, args, { dataloaders: { addressLoader } }, info) => {
-    //   console.log('user', user)
-    //   console.log('loader', addressLoader)
-    //   return addressLoader
-    //     .load({ key: user.get('address'), info })
-    //     .catch(handleError)
-    // },
-    address: (user, args, { db, requestedFields }, info) => {
-      console.log(user)
-      return db.Address.findAll({
-        where: { user: user.get('id') },
-        attributes: requestedFields.getFields(info, {
-          keep: ['id'],
-        }),
-      }).catch(handleError)
-    },
+    address: (user, args, { models }) => models.Address.findOne({ userId: user.id })
+      .populate('address')
+      .catch(err => handleError(err, "Erro ao consultar o banco")),
   },
 
   Query: {
-    allUsers: (
-      parent,
-      { first = 50, offset = 0 },
-      { db, requestedFields },
-      info
-    ) => {
-      console.log(info)
-      return db.User.findAll({
-        // limit: first,
-        // offset: offset,
-        // attributes: requestedFields.getFields(info, {
-        //   keep: ['id'],
-        // }),
-      }).catch(handleError)
-    },
-    user: (parent, { id }, { db, requestedFields }, info) => {
-      return db.User.findByPk(id, {
-        attributes: requestedFields.getFields(info, {
-          keep: ['id'],
-        }),
-      })
-        .then((user) => {
-          throwError(!user, `Usuário com id ${id} não encontrado!`)
-          return user
-        })
-        .catch(handleError)
-    },
-    currentUser: compose(authResolvers, (parent, args, context, info) => {
-      return context.db.User.findByPk(context.authUser.id, {
-        attributes: context.requestedFields.getFields(info, {
-          keep: ['id'],
-        }),
-      })
-        .then((user) => {
-          throwError(
-            !user,
-            `Usuário com id ${context.authUser.id} não encontrado!`
-          )
-          return user
-        })
-        .catch(handleError)
-    }),
+    allUsers: async (parent, args, context) => await context.models.User.find(),
+
+    user: async (parent, args, context) => await context.models.User.findById(args.id)
+      .then(user => !user ? handleError(user, "Usuário não encontrado!") : user)
+      .catch(err => handleError(err, "Erro ao comunicar com o banco.")),
+
+    currentUser: compose(authUser)(async (parent, args, context) => await context.models.User.findById(context.authUser.id)
+      .then(user => !user ? handleError(user, "Usuário não encontrado!") : user)
+      .catch(err => handleError(err, "Erro ao comunicar com o banco."))),
   },
+
   Mutation: {
-    createUser: (parent, { input }, { db }) => {
-      return db.sequelize
-        .transaction((t) => {
-          return db.User.create(input, { transaction: t })
-        })
-        .catch(handleError)
+    createUser: async (parent, args, context) => {
+      const user = new context.models.User(args.input)
+      return await user.save().catch(err => handleError(err, "Erro ao comunicar com o banco."))
     },
-    updateUser: compose(
-      authResolvers,
-      (parent, { input }, { db, authUser }) => {
-        return db.sequelize
-          .transaction((t) => {
-            return db.User.findByPk(authUser.id).then((user) => {
-              throwError(!user, `Usuário com id ${authUser.id} não encontrado!`)
-              return user.update(input, { transaction: t })
-            })
-          })
-          .catch(handleError)
-      }
+
+    updateUser: compose(authUser)(async (parent, { input }, context) =>
+      await context.models.User.findByIdAndUpdate(context.authUser.id, { $set: input }, { new: true })
+        .then((data) => data ?
+          { success: true, data }
+          : handleError(data, "Usuario inválido.")
+        ).catch(err => handleError(err, "Erro ao comunicar com o banco."))
     ),
-    updateUserPassword: compose(
-      authResolvers,
-      (parent, { input }, { db, authUser }) => {
-        return db.sequelize
-          .transaction((t) => {
-            return db.User.findByPk(authUser.id).then((user) => {
-              throwError(!user, `Usuário com id ${authUser.id} não encontrado!`)
-              return user
-                .update(input, { transaction: t })
-                .then((user) => !!user)
-            })
-          })
-          .catch(handleError)
-      }
+
+    updateUserPassword: compose(authUser)(async (parent, { password }, context) =>
+      await context.models.User.findByIdAndUpdate(context.authUser.id, { $set: { password } }, { new: true })
+        .then((data) => data ? true : false).catch(err => handleError(err, "Erro ao comunicar com o banco."))
     ),
-    recoverUserPassword: (parent, { id, input }, { db }) => {
-      return db.sequelize
-        .transaction((t) => {
-          return db.User.findByPk(id).then((user) => {
-            throwError(!user, `Usuário com id ${id} não encontrado!`)
-            return user.update(input, { transaction: t }).then((user) => !!user)
-          })
-        })
-        .catch(handleError)
-    },
-    deleteUser: compose(authResolvers, (parent, args, { db, authUser }) => {
-      return db.sequelize
-        .transaction((t) => {
-          return db.User.findByPk(authUser.id).then((user) => {
-            throwError(!user, `Usuário com id ${authUser.id} não encontrado!`)
-            return user.destroy({ transaction: t }).then((user) => !!user)
-          })
-        })
-        .catch(handleError)
-    }),
+
+    recoverUserPassword: async (parent, { email, password }, context) =>
+      await context.models.User.findByOneAndUpdate({ email }, { $set: { password } }, { new: true })
+        .then((data) => data ? true : false).catch(err => handleError(err, "Erro ao comunicar com o banco.")),
+
+    deleteUser: compose(authUser)(async (parent, args, context) =>
+      await context.models.User.findByIdAndRemove(context.authUser.id)
+        .then((data) => data ? true : false).catch(err => handleError(err, "Erro ao comunicar com o banco."))
+    ),
   },
 }
-
-// mutation {
-//   createUser (input: {
-//     name: "name"
-//     email: "email"
-//     password: "password"
-//     role: USER
-//     type: CLIENTE
-//     phone: "12313213"
-//     status: true
-//     phoneverif: false
-//   }){
-//     email
-//   }
-// }
-
-// mutation {
-//   authUser (
-//     email: "email"
-//     password: "password"
-//   ){
-//     token
-//   }
-// }
-
-// mutation {
-//   createAddress (input: {
-//     zipcode: "132465"
-//     street: "street"
-//     city: "city"
-//     state: "state"
-//   }){
-//     street
-//   }
-// }
-
-// query {
-//   allUsers {
-//     name
-//     address {
-//       street
-//     }
-//   }
-// }

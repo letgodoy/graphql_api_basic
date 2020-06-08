@@ -1,30 +1,43 @@
-const jwt = require('jsonwebtoken')
-const { JWT_SECRET } = require('../../../utils/utils')
+import jwt from 'jsonwebtoken'
+import { JWT_SECRET, handleError } from '../../../utils/utils'
+import bcryptjs from 'bcryptjs';
 
-module.exports = {
+//gerar o token
+export default {
   Mutation: {
-    authUser: async (parent, { email, password }, { db }) => {
+    // eslint-disable-next-line no-undef
+    authUser: async (parent, { email, password }, context) => await new Promise((resolve, reject) => {
       const errorMessage = 'Não autorizado, e-mail ou senha errados!'
-      try {
-        const user = await db.User.findOne({ email }).exec();
+      //se ja ta autenticado nao precisa gerar token.
+      if (context.authUser) throw new Error("Você já está autenticado.")
 
-        if (!user) {
-          user.comparePassword(password, (error, match) => {
-            if (!match) throw new Error(errorMessage)
-            if (error) throw new Error(error.message)
-            const payload = { sub: user._id }
-            return {
-              token: jwt.sign(payload, JWT_SECRET),
-            }
-          });
-        } else {
-          throw new Error(errorMessage)
-        }
+      try {
+        //verifica se existe o email digitado
+        context.models.User.findOne({ email }).then(
+          user =>
+            user ?
+              //compara a senha digitada, com a senha criptografada no banco. a senha digitada nao é criptografa
+              bcryptjs.compare(password, user.password, (error, match) => {
+
+                if (process.env.NODE_ENV === 'development') console.log('match password', match)
+
+                if (error) handleError(error, errorMessage)
+
+                if (match) {
+                  const payload = { sub: user._id }
+                  const token = jwt.sign(payload, JWT_SECRET)
+                  resolve({ token })
+                } else {
+                  reject(handleError(error, errorMessage))
+                  return null
+                }
+              })
+              //achou ninguem
+              : reject(handleError(user, errorMessage))
+        ).catch(err => handleError(err, errorMessage))
       } catch {
-        error => {
-          throw new Error(error.message)
-        }
+        error => handleError(error, errorMessage)
       }
-    }
+    })
   }
 }

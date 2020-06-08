@@ -1,4 +1,4 @@
-const addressTypes = `
+export const addressTypes = `
 
     type Address {
         id: ID!
@@ -28,15 +28,14 @@ const addressTypes = `
 
 `
 
-const addressQueries = `
+export const addressQueries = `
     allAddresses(first: Int, offset: Int): [ Address! ]!
     address(id: ID!): Address
 `
 
-const addressMutations = `
+export const addressMutations = `
     createAddress(input: AddressInput!): Address
-    updateAddress(id: ID!, input: AddressInput!): Address
-    deleteAddress(id: ID!): Boolean
+    updateAddress(input: AddressInput!): Address
+    deleteAddress: Boolean
 `
 
-module.exports = { addressTypes, addressQueries, addressMutations }

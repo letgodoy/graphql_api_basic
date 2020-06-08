@@ -11,14 +11,14 @@
     "pretest": "eslint --ignore-path .gitignore .",
     "postinstall": "rm -rf dist && yarn run build",
     "lint": "yarn prettier --write --check --config ./.prettierrc \"**/*.js\" && eslint --fix ./src",
-    "release": "release-it patch --no-npm.publish"
-},
-
-"husky": {
-  "hooks": {
+    "release": "release-it patch --no-npm.publish",
+    "clusters": "set NODE_ENV=production & set port=8080 & node dist/clusters"
+  },
+  "husky": {
+    "hooks": {
       "pre-commit": "yarn lint"
-  }
-},
+    }
+  },
   "keywords": [],
   "author": "letgodoy.com",
   "license": "ISC",
@@ -53,9 +53,6 @@
     "express": "^4.17.1",
     "express-graphql": "^0.9.0",
     "graphql": "^15.0.0",
-    "graphql-compose": "^7.18.1",
-    "graphql-compose-connection": "^6.2.1",
-    "graphql-compose-mongoose": "^7.3.8",
     "graphql-fields": "^2.0.3",
     "graphql-middleware": "^4.0.2",
     "graphql-tools": "^6.0.7",

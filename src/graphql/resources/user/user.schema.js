@@ -1,4 +1,4 @@
-const userTypes = `
+export const userTypes = `
 
     type User {
         id: ID!
@@ -8,23 +8,8 @@ const userTypes = `
         createdAt: String!
         updatedAt: String!
         birthday: String
-        chatsFrom: [Chat!]!
-        chatsTo: [Chat!]!
-        commentsTo: [Comment!]!
-        commentsfrom: [Comment!]!
-        description: String
-        document: String
-        notifications: [Notification!]!
-        phone: String!
-        proposes: [Propose!]!
-        proposesFrom: [Propose!]!
-        ranks: [Rank!]!
-        status: Boolean!
         type: TYPE!
-        anuncioses: [Anuncio!]!
         phoneverif: Boolean!
-        photo: File
-        ranksmaked: [Rank!]!
         address: Address
     }
 
@@ -42,51 +27,42 @@ const userTypes = `
     input UserCreateInput {
         email: String!
         password: String!
-        role: ROLE!
+        role: ROLE
         birthday: String
         description: String
         document: String
         name: String!
         phone: String!
-        status: Boolean!
-        type: TYPE!
-        phoneverif: Boolean!
-        photo: FileInput
+        status: Boolean
+        type: TYPE
+        phoneverif: Boolean
         address: AddressInput
     }
 
     input UserUpdateInput {
-        email: String!
-        role: ROLE!
+        email: String
+        role: ROLE
         birthday: String
         description: String
         document: String
-        name: String!
-        phone: String!
-        status: Boolean!
-        type: TYPE!
-        phoneverif: Boolean!
-        photo: FileInput
+        name: String
+        phone: String
+        status: Boolean
+        type: TYPE
+        phoneverif: Boolean
     }
-
-    input UserUpdatePasswordInput {
-        password: String!
-    }
-
 `
 
-const userQueries = `
+export const userQueries = `
     allUsers(first: Int, offset: Int): [ User! ]!
     user(id: ID!): User
     currentUser: User
 `
 
-const userMutations = `
+export const userMutations = `
     createUser(input: UserCreateInput!): User
     updateUser(input: UserUpdateInput!): User
-    updateUserPassword(input: UserUpdatePasswordInput!): Boolean
-    recoverUserPassword(id: ID!, input: UserUpdatePasswordInput!): Boolean
+    updateUserPassword(password: String!): Boolean
+    recoverUserPassword(email: String!, password: String!): Boolean
     deleteUser: Boolean
 `
-
-module.exports = { userTypes, userQueries, userMutations }

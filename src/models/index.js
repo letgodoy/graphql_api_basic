@@ -1,12 +1,7 @@
-import { User, UserTC } from './UserModel';
-import { Address, AddressTC } from './AddressModel';
+import User from './UserModel';
+import Address from './AddressModel'
 
-export const db = {
-  UserTC,
-  AddressTC
-};
-
-export const models = {
+export default {
   User,
   Address
 };

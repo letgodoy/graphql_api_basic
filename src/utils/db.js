@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import { handleError } from './utils'
 
 dotenv.config();
 
@@ -13,16 +14,13 @@ const connection = mongoose.connect(process.env.MONGODB_URI, {
     bufferMaxEntries: 0,
     keepAlive: 120,
     useNewUrlParser: true,
+    useFindAndModify: false,
 });
 
 mongoose.set('useCreateIndex', true);
 
-connection
+export default connection
     .then(db => db)
     .catch(err => {
-        // eslint-disable-next-line no-constant-condition
-        process.env.NODE_ENV = 'development' ? console.log(err) : null;
-        throw new Error("Erro ao conectao com o banco")
+        handleError(err, "Erro ao conectao com o banco")
     });
-
-export default connection;
