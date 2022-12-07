@@ -55,7 +55,7 @@
     "graphql": "^15.1.0",
     "graphql-fields": "^2.0.3",
     "graphql-middleware": "^4.0.2",
-    "graphql-tools": "^6.0.8",
+    "graphql-tools": "^6.2.6",
     "helmet": "^3.22.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
